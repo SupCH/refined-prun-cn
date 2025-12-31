@@ -95,26 +95,26 @@ async function onChangeModeClick() {
 <template>
   <div>
     <form :class="$style.form">
-      <Commands label="Change feature set">
+      <Commands :label="t('feat.changeSet')">
         <PrunButton primary @click="onChangeModeClick">
-          SWITCH TO {{ isFullMode ? 'BASIC' : 'FULL' }}
+          {{ t('feat.switchTo', isFullMode ? 'BASIC' : 'FULL') }}
         </PrunButton>
       </Commands>
-      <Active :class="$style.warningRoot" label="Search">
+      <Active :class="$style.warningRoot" :label="t('feat.search')">
         <TextInput v-model="searchQuery" />
         <PrunButton
           v-if="!isEmpty(Object.keys(changed))"
           primary
           :class="$style.warning"
           @click="onReloadClick">
-          RESTART THE GAME TO APPLY CHANGES
+          {{ t('feat.restartWarning') }}
         </PrunButton>
       </Active>
     </form>
     <SectionHeader>
-      Features: {{ sorted.length }}
-      <span v-if="disabledFeatures.size > 0">({{ disabledFeatures.size }} off) </span>
-      <span v-if="!isFullMode">(+{{ advanced.length }} more available in full mode)</span>
+      {{ t('feat.featuresCount', sorted.length) }}
+      <span v-if="disabledFeatures.size > 0">{{ t('feat.offCount', disabledFeatures.size) }} </span>
+      <span v-if="!isFullMode">{{ t('feat.moreAvailable', advanced.length) }}</span>
     </SectionHeader>
     <table>
       <tbody>
@@ -123,14 +123,18 @@ async function onChangeModeClick() {
             <div :class="[C.RadioItem.indicator, $style.indicator, toggleClass(feature.id)]" />
             <div>
               <div :class="$style.id">{{ feature.id }}</div>
-              <div :class="$style.description">{{ feature.description }}</div>
+              <div :class="$style.description">{{
+                t('features.' + feature.id) === 'features.' + feature.id
+                  ? feature.description
+                  : t('features.' + feature.id)
+              }}</div>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
     <template v-if="!isFullMode">
-      <SectionHeader>Full Mode Features</SectionHeader>
+      <SectionHeader>{{ t('feat.fullModeFeatures') }}</SectionHeader>
       <table>
         <tbody>
           <tr v-for="feature in advanced" :key="feature.id">
@@ -138,7 +142,11 @@ async function onChangeModeClick() {
               <div :class="[C.RadioItem.indicator, C.RadioItem.disabled, $style.indicator]" />
               <div>
                 <div :class="$style.id">{{ feature.id }}</div>
-                <div :class="$style.description">{{ feature.description }}</div>
+                <div :class="$style.description">{{
+                  t('features.' + feature.id) === 'features.' + feature.id
+                    ? feature.description
+                    : t('features.' + feature.id)
+                }}</div>
               </div>
             </td>
           </tr>

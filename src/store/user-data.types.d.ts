@@ -116,4 +116,6 @@ declare namespace UserData {
   }
 
   type ExchangeChartType = 'SMOOTH' | 'ALIGNED' | 'RAW';
+
+  type Language = 'en' | 'zh';
 }

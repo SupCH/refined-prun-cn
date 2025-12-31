@@ -26,7 +26,7 @@ function createNewList(ev: Event) {
 
 function confirmDelete(ev: Event, list: UserData.TaskList) {
   showConfirmationOverlay(ev, () => removeArrayElement(userData.todo, list), {
-    message: `Are you sure you want to delete the task list "${list.name}"?`,
+    message: t('todo.deleteListConfirm', list.name),
   });
 }
 
@@ -66,14 +66,14 @@ const draggableOptions = {
 
 <template>
   <ActionBar>
-    <PrunButton primary @click="createNewList">CREATE NEW</PrunButton>
+    <PrunButton primary @click="createNewList">{{ t('todo.addList') }}</PrunButton>
   </ActionBar>
   <table>
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Tasks</th>
-        <th>Due Date</th>
+        <th>{{ t('todo.listName') }}</th>
+        <th>{{ t('todo.tasks') }}</th>
+        <th>{{ t('todo.dueDate') }}</th>
         <th />
       </tr>
     </thead>
@@ -96,7 +96,9 @@ const draggableOptions = {
           <span>{{ getDueDate(list) }}</span>
         </td>
         <td>
-          <PrunButton danger @click="confirmDelete($event, list)">DELETE</PrunButton>
+          <PrunButton danger @click="confirmDelete($event, list)">{{
+            t('todo.deleteList')
+          }}</PrunButton>
         </td>
       </tr>
     </tbody>

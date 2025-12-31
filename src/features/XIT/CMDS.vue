@@ -14,10 +14,10 @@ const sorted = xit.registry.sort((a, b) => {
   <table>
     <thead>
       <tr>
-        <th>Command</th>
-        <th>Description</th>
-        <th>Mandatory parameters</th>
-        <th>Optional parameters</th>
+        <th>{{ t('cmds.command') }}</th>
+        <th>{{ t('cmds.description') }}</th>
+        <th>{{ t('cmds.mandatory') }}</th>
+        <th>{{ t('cmds.optional') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -29,7 +29,7 @@ const sorted = xit.registry.sort((a, b) => {
             {{ castArray(command.command)[0] }}
           </PrunLink>
         </td>
-        <td>{{ command.description }}</td>
+        <td>{{ t('commands.' + castArray(command.command)[0]) }}</td>
         <td>{{ command.mandatoryParameters }}</td>
         <td>{{ command.optionalParameters }}</td>
       </tr>

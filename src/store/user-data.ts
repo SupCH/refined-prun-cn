@@ -31,6 +31,7 @@ export const initialUserData = deepFreeze({
       threshold: 60,
       offset: 10,
     },
+    language: undefined as UserData.Language | undefined,
     sidebar: [
       ['BS', 'BS'],
       ['CONT', 'XIT CONTS'],

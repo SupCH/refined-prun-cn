@@ -123,7 +123,12 @@ const planetBurn = computed(() => {
     }
   }
 
-  const overallSection = { burn: overallBurn, planetName: 'Overall', naturalId: '', storeId: '' };
+  const overallSection = {
+    burn: overallBurn,
+    planetName: t('burn.overall'),
+    naturalId: '',
+    storeId: '',
+  };
   if (queryResult.value.overallOnly) {
     return [overallSection];
   }
@@ -168,10 +173,10 @@ function onExpandAllClick() {
   <LoadingSpinner v-if="planetBurn === undefined" />
   <template v-else>
     <div :class="C.ComExOrdersPanel.filter">
-      <RadioItem v-model="red" horizontal>RED</RadioItem>
-      <RadioItem v-model="yellow" horizontal>YELLOW</RadioItem>
-      <RadioItem v-model="green" horizontal>GREEN</RadioItem>
-      <RadioItem v-model="inf" horizontal>INF</RadioItem>
+      <RadioItem v-model="red" horizontal>{{ t('burn.red') }}</RadioItem>
+      <RadioItem v-model="yellow" horizontal>{{ t('burn.yellow') }}</RadioItem>
+      <RadioItem v-model="green" horizontal>{{ t('burn.green') }}</RadioItem>
+      <RadioItem v-model="inf" horizontal>{{ t('burn.inf') }}</RadioItem>
     </div>
     <table>
       <thead>
@@ -180,23 +185,21 @@ function onExpandAllClick() {
             {{ anyExpanded ? '-' : '+' }}
           </th>
           <th v-else />
-          <th>Inv</th>
+          <th>{{ t('burn.inv') }}</th>
           <th>
             <InlineFlex>
-              Burn
-              <Tooltip position="bottom" tooltip="How much of a material is consumed per day." />
+              {{ t('burn.burn') }}
+              <Tooltip position="bottom" :tooltip="t('burn.burnTooltip')" />
             </InlineFlex>
           </th>
           <th>
             <InlineFlex>
-              Need
-              <Tooltip
-                position="bottom"
-                tooltip="How much of a material needs to be delivered to be fully supplied." />
+              {{ t('burn.need') }}
+              <Tooltip position="bottom" :tooltip="t('burn.needTooltip')" />
             </InlineFlex>
           </th>
-          <th>Days</th>
-          <th>CMD</th>
+          <th>{{ t('burn.days') }}</th>
+          <th>{{ t('burn.cmd') }}</th>
         </tr>
       </thead>
       <tbody :class="$style.fakeRow">

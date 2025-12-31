@@ -22,19 +22,19 @@ const nonCurrent = computed(() =>
   <table v-else>
     <thead>
       <tr>
-        <th>Contract</th>
-        <th>Deadline</th>
-        <th>Condition</th>
+        <th>{{ t('conts.contract') }}</th>
+        <th>{{ t('contc.deadline') }}</th>
+        <th>{{ t('contc.condition') }}</th>
       </tr>
     </thead>
     <thead>
       <tr>
-        <th colspan="3">Current Conditions</th>
+        <th colspan="3">{{ t('contc.currentConditions') }}</th>
       </tr>
     </thead>
     <tbody>
       <tr v-if="isEmpty(current)">
-        <td colspan="3">No pending conditions</td>
+        <td colspan="3">{{ t('contc.noPending') }}</td>
       </tr>
       <template v-else>
         <ConditionRow
@@ -47,12 +47,12 @@ const nonCurrent = computed(() =>
     </tbody>
     <thead>
       <tr>
-        <th colspan="3">Non-Current Conditions</th>
+        <th colspan="3">{{ t('contc.nonCurrentConditions') }}</th>
       </tr>
     </thead>
     <tbody>
       <tr v-if="isEmpty(nonCurrent)">
-        <td colspan="3">No pending conditions</td>
+        <td colspan="3">{{ t('contc.noPending') }}</td>
       </tr>
       <template v-else>
         <ConditionRow

@@ -22,7 +22,7 @@ function createNewNote(ev: Event) {
 
 function confirmDelete(ev: Event, note: UserData.Note) {
   showConfirmationOverlay(ev, () => deleteNote(note), {
-    message: `Are you sure you want to delete the note "${note.name}"?`,
+    message: t('note.deleteConfirm', note.name),
   });
 }
 
@@ -38,13 +38,13 @@ const draggableOptions = {
 
 <template>
   <ActionBar>
-    <PrunButton primary @click="createNewNote">CREATE NEW</PrunButton>
+    <PrunButton primary @click="createNewNote">{{ t('note.newNote') }}</PrunButton>
   </ActionBar>
   <table>
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Length</th>
+        <th>{{ t('note.noteName') }}</th>
+        <th>{{ t('note.noteLength') }}</th>
         <th />
       </tr>
     </thead>
@@ -62,11 +62,13 @@ const draggableOptions = {
         </td>
         <td>
           <span>
-            {{ note.text.length.toLocaleString() }} character{{ note.text.length !== 1 ? 's' : '' }}
+            {{ t('note.characters', note.text.length.toLocaleString()) }}
           </span>
         </td>
         <td>
-          <PrunButton danger @click="confirmDelete($event, note)">DELETE</PrunButton>
+          <PrunButton danger @click="confirmDelete($event, note)">{{
+            t('note.deleteNote')
+          }}</PrunButton>
         </td>
       </tr>
     </tbody>

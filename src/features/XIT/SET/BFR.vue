@@ -99,22 +99,18 @@ const draggableOptions = {
 
 <template>
   <SectionHeader>
-    Override Default Buffer Sizes
-    <Tooltip
-      position="bottom"
-      :class="$style.tooltip"
-      tooltip="The first matched rule will be used. If no rules match, the default buffer size will be used.
-        You can reorganize the rules by dragging them up and down." />
+    {{ t('bfr.title') }}
+    <Tooltip position="bottom" :class="$style.tooltip" :tooltip="t('bfr.tooltip')" />
   </SectionHeader>
   <ActionBar>
     <template v-if="picking">
       <PrunButton neutral>
-        {{ pickedBuffer ? 'CLICK TO PICK THIS BUFFER' : 'CLICK ANYWHERE TO CANCEL' }}
+        {{ pickedBuffer ? t('bfr.clickToPick') : t('bfr.clickToCancel') }}
       </PrunButton>
     </template>
     <template v-else>
-      <PrunButton primary @click="picking = true">PICK BUFFER</PrunButton>
-      <PrunButton primary @click="addNewRule">ADD NEW RULE</PrunButton>
+      <PrunButton primary @click="picking = true">{{ t('bfr.pickBuffer') }}</PrunButton>
+      <PrunButton primary @click="addNewRule">{{ t('bfr.addNewRule') }}</PrunButton>
     </template>
   </ActionBar>
   <table>
@@ -123,20 +119,18 @@ const draggableOptions = {
         <th />
         <th>
           <InlineFlex>
-            Command
-            <Tooltip
-              position="right"
-              tooltip="Can be a full command, a part of it, or a regular expression. Case-insensitive." />
+            {{ t('bfr.command') }}
+            <Tooltip position="right" :tooltip="t('bfr.commandTooltip')" />
           </InlineFlex>
         </th>
-        <th>Width</th>
-        <th>Height</th>
+        <th>{{ t('bfr.width') }}</th>
+        <th>{{ t('bfr.height') }}</th>
         <th />
       </tr>
     </thead>
     <tbody v-if="userData.settings.buffers.length === 0">
       <tr>
-        <td colspan="5">Nothing here yet.</td>
+        <td colspan="5">{{ t('bfr.nothingYet') }}</td>
       </tr>
     </tbody>
     <template v-else>
@@ -165,7 +159,7 @@ const draggableOptions = {
             </div>
           </td>
           <td>
-            <PrunButton danger @click="deleteRule(rule)">DELETE</PrunButton>
+            <PrunButton danger @click="deleteRule(rule)">{{ t('bfr.delete') }}</PrunButton>
           </td>
         </tr>
       </tbody>

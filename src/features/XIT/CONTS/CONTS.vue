@@ -39,15 +39,15 @@ function compareContracts(a: PrunApi.Contract, b: PrunApi.Contract) {
   <table v-else>
     <thead>
       <tr>
-        <th>Contract</th>
-        <th>Item</th>
-        <th>Partner</th>
-        <th>Self</th>
+        <th>{{ t('conts.contract') }}</th>
+        <th>{{ t('conts.item') }}</th>
+        <th>{{ t('conts.partner') }}</th>
+        <th>{{ t('conts.self') }}</th>
       </tr>
     </thead>
     <tbody>
       <tr v-if="isEmpty(filtered)">
-        <td colspan="4">No active contracts</td>
+        <td colspan="4">{{ t('conts.noActive') }}</td>
       </tr>
       <template v-else>
         <ContractRow v-for="contract in filtered" :key="contract.id" :contract="contract" />

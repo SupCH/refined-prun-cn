@@ -58,8 +58,8 @@ function onImportClick(ev: Event) {
 
 function onDeleteClick(ev: Event, pkg: UserData.ActionPackageData) {
   showConfirmationOverlay(ev, () => removeArrayElement(userData.actionPackages, pkg), {
-    message: `Are you sure you want to delete the action package "${pkg.global.name}"?`,
-    confirmLabel: 'DELETE',
+    message: t('act.deleteConfirm', pkg.global.name),
+    confirmLabel: t('act.delete'),
   });
 }
 
@@ -74,25 +74,27 @@ function paramName(pkg: UserData.ActionPackageData) {
 
 <template>
   <ActionBar>
-    <div v-if="showQuickstart">Click here if you don't<br />know what to do!</div>
+    <div v-if="showQuickstart" v-html="t('act.quickstartHelp')" />
     <div v-if="showQuickstart">→</div>
-    <PrunButton v-if="showQuickstart" primary @click="onQuickstartClick">QUICKSTART</PrunButton>
-    <PrunButton primary @click="onCreateClick">CREATE NEW</PrunButton>
-    <PrunButton primary @click="onImportClick">IMPORT</PrunButton>
+    <PrunButton v-if="showQuickstart" primary @click="onQuickstartClick">{{
+      t('act.quickstart')
+    }}</PrunButton>
+    <PrunButton primary @click="onCreateClick">{{ t('act.createPackage') }}</PrunButton>
+    <PrunButton primary @click="onImportClick">{{ t('act.import') }}</PrunButton>
   </ActionBar>
   <table>
     <thead>
       <tr>
         <th :class="$style.dragHeaderCell"></th>
-        <th>Name</th>
-        <th>Execute</th>
-        <th>Edit</th>
-        <th>Delete</th>
+        <th>{{ t('act.name') }}</th>
+        <th>{{ t('act.execute') }}</th>
+        <th>{{ t('act.edit') }}</th>
+        <th>{{ t('act.delete') }}</th>
       </tr>
     </thead>
     <tbody v-if="userData.actionPackages.length === 0">
       <tr>
-        <td colspan="5">No action packages.</td>
+        <td colspan="5">{{ t('act.noPackages') }}</td>
       </tr>
     </tbody>
     <tbody
@@ -112,16 +114,18 @@ function paramName(pkg: UserData.ActionPackageData) {
         </td>
         <td>
           <PrunButton primary @click="showBuffer(`XIT ACT_${paramName(pkg)}`)">
-            EXECUTE
+            {{ t('act.execute') }}
           </PrunButton>
         </td>
         <td>
           <PrunButton primary @click="showBuffer(`XIT ACT_EDIT_${paramName(pkg)}`)">
-            EDIT
+            {{ t('act.edit') }}
           </PrunButton>
         </td>
         <td>
-          <PrunButton dark inline @click="onDeleteClick($event, pkg)">delete</PrunButton>
+          <PrunButton dark inline @click="onDeleteClick($event, pkg)">{{
+            t('act.delete')
+          }}</PrunButton>
         </td>
       </tr>
     </tbody>

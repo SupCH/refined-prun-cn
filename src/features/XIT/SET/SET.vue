@@ -9,22 +9,22 @@ import BFR from '@src/features/XIT/SET/BFR.vue';
 const tabs: Tab[] = [
   {
     id: 'GAME',
-    label: 'Gameplay',
+    label: t('settings.tabs.gameplay'),
     component: GAME,
   },
   {
     id: 'FEAT',
-    label: 'Features',
+    label: t('settings.tabs.features'),
     component: FEAT,
   },
   {
     id: 'FIN',
-    label: 'Financial',
+    label: t('settings.tabs.financial'),
     component: FIN,
   },
   {
     id: 'BFR',
-    label: 'Buffers',
+    label: t('settings.tabs.buffers'),
     component: BFR,
   },
 ];

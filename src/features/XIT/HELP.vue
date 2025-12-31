@@ -6,43 +6,43 @@ import PrunLink from '@src/components/PrunLink.vue';
   <table>
     <thead>
       <tr>
-        <th>I want to...</th>
-        <th>Command</th>
+        <th>{{ t('help.wantTo') }}</th>
+        <th>{{ t('help.command') }}</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>Change Refined PrUn settings.</td>
+        <td>{{ t('help.changeSettings') }}</td>
         <td>
           <PrunLink command="XIT SET" />
         </td>
       </tr>
       <tr>
-        <td>Change the feature set to Basic/Full.</td>
+        <td>{{ t('help.changeFeatureSet') }}</td>
         <td>
           <PrunLink command="XIT SET FEAT" />
         </td>
       </tr>
       <tr>
-        <td>Disable some Refined PrUn feature.</td>
+        <td>{{ t('help.disableFeature') }}</td>
         <td>
           <PrunLink command="XIT SET FEAT" />
         </td>
       </tr>
       <tr>
-        <td>Find out which XIT commands are available.</td>
+        <td>{{ t('help.findCommands') }}</td>
         <td>
           <PrunLink command="XIT CMDS" />
         </td>
       </tr>
       <tr>
-        <td>Import PMMG settings.</td>
+        <td>{{ t('help.importPmmg') }}</td>
         <td>
           <PrunLink command="XIT SET PMMG" />
         </td>
       </tr>
       <tr>
-        <td>Get a random corgi gif.</td>
+        <td>{{ t('help.corgiGif') }}</td>
         <td>
           <PrunLink command="XIT GIF CORGI" />
         </td>

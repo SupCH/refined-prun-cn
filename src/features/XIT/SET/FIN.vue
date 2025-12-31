@@ -21,7 +21,7 @@ const sortedData = computed(() => balanceHistory.value.slice().reverse());
 function confirmDataPointDelete(ev: Event, index: number) {
   index = balanceHistory.value.length - index - 1;
   showConfirmationOverlay(ev, () => deleteBalanceHistoryDataPoint(index), {
-    message: `You are about to delete a historical data point. Do you want to continue?`,
+    message: t('fin_settings.confirmDelete'),
   });
 }
 
@@ -36,7 +36,7 @@ function deleteBalanceHistoryDataPoint(index: number) {
 
 function confirmAllDataDelete(ev: Event) {
   showConfirmationOverlay(ev, clearBalanceHistory, {
-    message: `You are about to clear all historical financial data. Do you want to continue?`,
+    message: t('fin_settings.confirmClearAll'),
   });
 }
 
@@ -62,39 +62,35 @@ function onIgnoredMaterialsSubmit() {
 </script>
 
 <template>
-  <SectionHeader>Price Settings</SectionHeader>
-  <Active
-    label="MM Materials"
-    tooltip="Comma-separated list of Market Maker materials.
-     The price of these materials will be equal to MM Bid price.">
+  <SectionHeader>{{ t('fin_settings.priceSettings') }}</SectionHeader>
+  <Active :label="t('fin_settings.mmMaterials')" :tooltip="t('fin_settings.mmMaterialsTooltip')">
     <TextInput
       v-model="mmMaterials"
       @keyup.enter="onMMMaterialsSubmit"
       @focusout="onMMMaterialsSubmit" />
   </Active>
   <Active
-    label="Ignored Materials"
-    tooltip="Comma-separated list of ignored materials.
-     The price of these materials is considered to be zero.">
+    :label="t('fin_settings.ignoredMaterials')"
+    :tooltip="t('fin_settings.ignoredMaterialsTooltip')">
     <TextInput
       v-model="ignoredMaterials"
       @keyup.enter="onIgnoredMaterialsSubmit"
       @focusout="onIgnoredMaterialsSubmit" />
   </Active>
-  <SectionHeader>Collected Data Points</SectionHeader>
+  <SectionHeader>{{ t('fin_settings.collectedData') }}</SectionHeader>
   <form>
     <Commands>
       <PrunButton primary :disabled="!canCollectFinDataPoint()" @click="collectFinDataPoint">
-        Collect Data Point
+        {{ t('fin_settings.collectData') }}
       </PrunButton>
     </Commands>
   </form>
   <table>
     <thead>
       <tr>
-        <th>Date</th>
-        <th>Equity</th>
-        <th>Command</th>
+        <th>{{ t('fin_settings.date') }}</th>
+        <th>{{ t('fin_settings.equity') }}</th>
+        <th>{{ t('fin_settings.command') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -102,18 +98,22 @@ function onIgnoredMaterialsSubmit() {
         <td>{{ hhmm(balance.timestamp) }} {{ ddmmyyyy(balance.timestamp) }}</td>
         <td>{{ formatValue(calcEquity(balance)) }}</td>
         <td>
-          <PrunButton dark inline @click="confirmDataPointDelete($event, i)">delete</PrunButton>
+          <PrunButton dark inline @click="confirmDataPointDelete($event, i)">{{
+            t('fin_settings.delete')
+          }}</PrunButton>
         </td>
       </tr>
     </tbody>
   </table>
   <SectionHeader>
-    Danger Zone
-    <Tooltip :class="$style.tooltip" tooltip="Clear all historical financial data" />
+    {{ t('fin_settings.dangerZone') }}
+    <Tooltip :class="$style.tooltip" :tooltip="t('fin_settings.clearData')" />
   </SectionHeader>
   <form>
     <Commands>
-      <PrunButton danger @click="confirmAllDataDelete">Clear Financial Data</PrunButton>
+      <PrunButton danger @click="confirmAllDataDelete">{{
+        t('fin_settings.clearData')
+      }}</PrunButton>
     </Commands>
   </form>
 </template>

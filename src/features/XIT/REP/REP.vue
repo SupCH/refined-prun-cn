@@ -81,26 +81,26 @@ function calculateAge(lastRepair: number) {
   <LoadingSpinner v-if="materials === undefined" />
   <template v-else>
     <form>
-      <Active label="Age Threshold">
+      <Active :label="t('rep.ageThreshold')">
         <NumberInput v-model="userData.settings.repair.threshold" />
       </Active>
-      <Active label="Time Offset">
+      <Active :label="t('rep.timeOffset')">
         <NumberInput v-model="userData.settings.repair.offset" />
       </Active>
     </form>
-    <SectionHeader>Shopping Cart</SectionHeader>
+    <SectionHeader>{{ t('rep.shoppingCart') }}</SectionHeader>
     <MaterialPurchaseTable
       :collapsible="isMultiTarget"
       :collapsed-by-default="true"
       :materials="materials" />
-    <SectionHeader>Buildings</SectionHeader>
+    <SectionHeader>{{ t('rep.buildings') }}</SectionHeader>
     <table>
       <thead>
         <tr>
-          <th>Ticker</th>
-          <th v-if="isMultiTarget">Target</th>
-          <th>Age (days)</th>
-          <th>Condition</th>
+          <th>{{ t('rep.ticker') }}</th>
+          <th v-if="isMultiTarget">{{ t('rep.target') }}</th>
+          <th>{{ t('rep.ageDays') }}</th>
+          <th>{{ t('rep.condition') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -113,7 +113,7 @@ function calculateAge(lastRepair: number) {
           <td>{{ percent1(entry.condition) }}</td>
         </tr>
         <tr v-for="entry in visibleShips" :key="objectId(entry)">
-          <td>(Ship)</td>
+          <td>{{ t('rep.ship') }}</td>
           <td>{{ entry.target }}</td>
           <td>{{ fixed1(calculateAge(entry.lastRepair)) }}</td>
           <td>{{ percent1(entry.condition) }}</td>

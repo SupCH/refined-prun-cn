@@ -7,107 +7,104 @@ import { ddmmyyyy } from '@src/utils/format';
 import { lastBalance, previousBalance } from '@src/store/user-data-balance';
 
 const currentAssets = computed<SectionData>(() => ({
-  name: 'Current Assets',
+  name: t('finbs.currentAssets'),
   total: summary.calcTotalCurrentAssets,
   children: [
     {
-      name: 'Cash and Cash Equivalents',
+      name: t('finbs.cashAndCashEquivalents'),
       value: summary.calcTotalCashAndCashEquivalents,
       children: [
         {
-          name: 'Cash',
+          name: t('finbs.cash'),
           value: x => x.assets?.current?.cashAndCashEquivalents?.cash,
         },
         {
-          name: 'Deposits',
+          name: t('finbs.deposits'),
           value: summary.calcTotalDeposits,
           children: [
             {
-              name: 'CX',
+              name: t('finbs.cx'),
               value: x => x.assets?.current?.cashAndCashEquivalents?.deposits?.cx,
             },
             {
-              name: 'FX',
+              name: t('finbs.fx'),
               value: x => x.assets?.current?.cashAndCashEquivalents?.deposits?.fx,
             },
           ],
         },
         {
-          name: 'MM Materials',
-          tooltip:
-            'Market Maker materials currently stored in CX warehouses. You can customize the list of' +
-            ' these materials using XIT SET FIN. Since these materials can be converted into cash' +
-            ' immediately, they are considered Cash Equivalents.',
+          name: t('finbs.mmMaterials'),
+          tooltip: t('finbs.mmMaterialsTooltip'),
           value: x => x.assets?.current?.cashAndCashEquivalents?.mmMaterials,
         },
       ],
     },
     {
-      name: 'Accounts Receivable',
+      name: t('finbs.accountsReceivable'),
       value: x => x.assets?.current?.accountsReceivable,
     },
     {
-      name: 'Loans Receivable',
+      name: t('finbs.loansReceivable'),
       value: summary.calcTotalLoansReceivable,
       children: [
         {
-          name: 'Principal',
+          name: t('finbs.principal'),
           value: x => x.assets?.current?.loansReceivable?.principal,
         },
         {
-          name: 'Interest',
+          name: t('finbs.interest'),
           value: x => x.assets?.current?.loansReceivable?.interest,
         },
       ],
     },
     {
-      name: 'Inventory',
+      name: t('finbs.inventory'),
       value: summary.calcTotalInventory,
       children: [
         {
-          name: 'CX-Listed Materials',
+          name: t('finbs.cxListedMaterials'),
           value: x => x.assets?.current?.inventory?.cxListedMaterials,
         },
         {
-          name: 'CX Inventory',
+          name: t('finbs.cxInventory'),
           value: x => x.assets?.current?.inventory?.cxInventory,
         },
         {
-          name: 'Materials in Transit',
+          name: t('finbs.materialsInTransit'),
           value: x => x.assets?.current?.inventory?.materialsInTransit,
         },
         {
-          name: 'Base Inventory',
+          name: t('finbs.baseInventory'),
           value: summary.calcTotalBaseInventory,
           children: [
             {
-              name: 'Finished Goods',
+              name: t('finbs.finishedGoods'),
               value: x => x.assets?.current?.inventory?.baseInventory?.finishedGoods,
             },
             {
-              name: 'Work-in-Progress (WIP)',
+              name: t('finbs.wip'),
               value: x => x.assets?.current?.inventory?.baseInventory?.workInProgress,
             },
             {
-              name: 'Raw Materials',
+              name: t('finbs.rawMaterials'),
               value: x => x.assets?.current?.inventory?.baseInventory?.rawMaterials,
             },
             {
-              name: 'Workforce Consumables',
+              name: t('finbs.workforceConsumables'),
               value: x => x.assets?.current?.inventory?.baseInventory?.workforceConsumables,
             },
             {
-              name: 'Other Items',
+              name: t('finbs.otherItems'),
               value: x => x.assets?.current?.inventory?.baseInventory?.otherItems,
             },
           ],
         },
         {
-          name: 'Fuel Tanks',
+          name: t('finbs.fuelTanks'),
           value: x => x.assets?.current?.inventory?.fuelTanks,
         },
         {
-          name: 'Materials Receivable',
+          name: t('finbs.materialsReceivable'),
           value: x => x.assets?.current?.inventory?.materialsReceivable,
         },
       ],
@@ -116,85 +113,85 @@ const currentAssets = computed<SectionData>(() => ({
 }));
 
 const nonCurrentAssets = computed<SectionData>(() => ({
-  name: 'Non-Current Assets',
+  name: t('finbs.nonCurrentAssets'),
   total: summary.calcTotalNonCurrentAssets,
   children: [
     {
-      name: 'Buildings, net',
+      name: t('finbs.buildingsNet'),
       value: summary.calcTotalBuildings,
       children: [
         {
-          name: 'Market Value',
+          name: t('finbs.marketValue'),
           value: summary.calcTotalBuildingsMarketValue,
           children: [
             {
-              name: 'Infrastructure',
+              name: t('finbs.infrastructure'),
               value: x => x.assets?.nonCurrent?.buildings?.marketValue?.infrastructure,
             },
             {
-              name: 'Resource Extraction',
+              name: t('finbs.resourceExtraction'),
               value: x => x.assets?.nonCurrent?.buildings?.marketValue?.resourceExtraction,
             },
             {
-              name: 'Production',
+              name: t('finbs.production'),
               value: x => x.assets?.nonCurrent?.buildings?.marketValue?.production,
             },
           ],
         },
         {
-          name: 'Acc. Depreciation',
+          name: t('finbs.accDepreciation'),
           less: true,
           value: x => x.assets?.nonCurrent?.buildings?.accumulatedDepreciation,
         },
       ],
     },
     {
-      name: 'Ships, net',
+      name: t('finbs.shipsNet'),
       value: summary.calcTotalShips,
       children: [
         {
-          name: 'Market Value',
+          name: t('finbs.marketValue'),
           value: x => x.assets?.nonCurrent?.ships?.marketValue,
         },
         {
-          name: 'Acc. Depreciation',
+          name: t('finbs.accDepreciation'),
           less: true,
           value: x => x.assets?.nonCurrent?.ships?.accumulatedDepreciation,
         },
       ],
     },
     {
-      name: 'Long-Term Receivables',
+      name: t('finbs.longTermReceivables'),
       value: summary.calcTotalLongTermReceivables,
       children: [
         {
-          name: 'Accounts Receivable',
+          name: t('finbs.accountsReceivable'),
           value: x => x.assets?.nonCurrent?.longTermReceivables?.accountsReceivable,
         },
         {
-          name: 'Materials in Transit',
+          name: t('finbs.materialsInTransit'),
           value: x => x.assets?.nonCurrent?.longTermReceivables?.materialsInTransit,
         },
         {
-          name: 'Materials Receivable',
+          name: t('finbs.materialsReceivable'),
           value: x => x.assets?.nonCurrent?.longTermReceivables?.materialsReceivable,
         },
         {
-          name: 'Loans Principal',
+          name: t('finbs.loansPrincipal'),
           value: x => x.assets?.nonCurrent?.longTermReceivables?.loansPrincipal,
         },
       ],
     },
     {
-      name: 'Intangible Assets',
+      name: t('finbs.intangibleAssets'),
       value: summary.calcTotalIntangibleAssets,
       children: [
         {
-          name: 'HQ Upgrades',
+          name: t('finbs.hqUpgrades'),
           value: x => x.assets?.nonCurrent?.intangibleAssets?.hqUpgrades,
         },
         {
-          name: 'APEX Representation Center',
+          name: t('finbs.arc'),
           value: x => x.assets?.nonCurrent?.intangibleAssets?.arc,
         },
       ],
@@ -203,27 +200,27 @@ const nonCurrentAssets = computed<SectionData>(() => ({
 }));
 
 const currentLiabilities = computed<SectionData>(() => ({
-  name: 'Current Liabilities',
+  name: t('finbs.currentLiabilities'),
   total: summary.calcTotalCurrentLiabilities,
   children: [
     {
-      name: 'Accounts Payable',
+      name: t('finbs.accountsPayable'),
       value: x => x.liabilities?.current?.accountsPayable,
     },
     {
-      name: 'Materials Payable',
+      name: t('finbs.materialsPayable'),
       value: x => x.liabilities?.current?.materialsPayable,
     },
     {
-      name: 'Loans Payable',
+      name: t('finbs.loansPayable'),
       value: summary.calcTotalLoansPayable,
       children: [
         {
-          name: 'Principal',
+          name: t('finbs.principal'),
           value: x => x.liabilities?.current?.loansPayable?.principal,
         },
         {
-          name: 'Interest',
+          name: t('finbs.interest'),
           value: x => x.liabilities?.current?.loansPayable?.interest,
         },
       ],
@@ -232,23 +229,23 @@ const currentLiabilities = computed<SectionData>(() => ({
 }));
 
 const nonCurrentLiabilities = computed<SectionData>(() => ({
-  name: 'Non-Current Liabilities',
+  name: t('finbs.nonCurrentLiabilities'),
   total: summary.calcTotalNonCurrentLiabilities,
   children: [
     {
-      name: 'Long-Term Payables',
+      name: t('finbs.longTermPayables'),
       value: summary.calcTotalLongTermPayables,
       children: [
         {
-          name: 'Accounts Payable',
+          name: t('finbs.accountsPayable'),
           value: x => x.liabilities?.nonCurrent?.longTermPayables?.accountsPayable,
         },
         {
-          name: 'Materials Payable',
+          name: t('finbs.materialsPayable'),
           value: x => x.liabilities?.nonCurrent?.longTermPayables?.materialsPayable,
         },
         {
-          name: 'Loans Principal',
+          name: t('finbs.loansPrincipal'),
           value: x => x.liabilities?.nonCurrent?.longTermPayables?.loansPrincipal,
         },
       ],
@@ -257,16 +254,16 @@ const nonCurrentLiabilities = computed<SectionData>(() => ({
 }));
 
 const equity = computed<SectionData>(() => ({
-  name: 'Equity',
+  name: t('finbs.equity'),
   coloredTotal: true,
   total: summary.calcEquity,
   children: [
     {
-      name: 'Total Assets',
+      name: t('finbs.totalAssets'),
       value: summary.calcTotalAssets,
     },
     {
-      name: 'Total Liabilities',
+      name: t('finbs.totalLiabilities'),
       less: true,
       value: summary.calcTotalLiabilities,
     },
@@ -287,16 +284,16 @@ const sections = [
     <thead>
       <tr>
         <th>&nbsp;</th>
-        <th>Current Period</th>
+        <th>{{ t('finbs.currentPeriod') }}</th>
         <th>
           <template v-if="lastBalance">{{ ddmmyyyy(lastBalance.timestamp) }}</template>
-          <template v-else>Last Period</template>
+          <template v-else>{{ t('finbs.lastPeriod') }}</template>
         </th>
         <th>
           <template v-if="previousBalance">{{ ddmmyyyy(previousBalance.timestamp) }}</template>
-          <template v-else>Previous Period</template>
+          <template v-else>{{ t('finbs.previousPeriod') }}</template>
         </th>
-        <th>Change</th>
+        <th>{{ t('finbs.change') }}</th>
       </tr>
     </thead>
     <BalanceSheetSection

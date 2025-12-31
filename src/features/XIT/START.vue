@@ -21,45 +21,45 @@ async function onFullClick() {
 
 <template>
   <div :class="$style.container">
-    <h1 :class="$style.title">Thank you for using Refined PrUn!</h1>
+    <h1 :class="$style.title">{{ t('start.welcome') }}</h1>
     <p>
-      You can find a list of all of the XIT commands using
+      {{ t('start.listCommands') }}
       <PrunLink inline command="XIT CMDS" />
     </p>
     <p>
-      You can change settings using
+      {{ t('start.changeSettings') }}
       <PrunLink inline command="XIT SET" />
     </p>
     <p>
-      For additional help, check
+      {{ t('start.additionalHelp') }}
       <PrunLink inline command="XIT HELP" />
     </p>
     <template v-if="needsToChoose">
       <p>
-        Please select a feature set (you can change it later using
+        {{ t('start.selectFeatureSet', 'XIT SET FEAT') }}
         <PrunLink inline command="XIT SET FEAT" />
         )
       </p>
       <div :class="$style.features">
         <PrunButton primary :class="$style.feature" @click="onBasicClick">
           <div :class="$style.featureTitle">
-            <div :class="$style.title">BASIC</div>
+            <div :class="$style.title">{{ t('start.basicTitle') }}</div>
           </div>
-          <div :class="$style.featureDescription">Includes features to enhance the APEX UI</div>
+          <div :class="$style.featureDescription">{{ t('start.basicDesc') }}</div>
         </PrunButton>
         <PrunButton primary :class="$style.feature" @click="onFullClick">
           <div :class="$style.featureTitle">
-            <div :class="$style.title">FULL</div>
-            <div>(requires restart)</div>
+            <div :class="$style.title">{{ t('start.fullTitle') }}</div>
+            <div>{{ t('start.fullRestart') }}</div>
           </div>
           <div :class="$style.featureDescription">
-            Includes all Basic features plus additional UI refinements for experienced players
+            {{ t('start.fullDesc') }}
           </div>
         </PrunButton>
       </div>
     </template>
     <p v-else>
-      You can change the feature set at any time using
+      {{ t('start.changeAnytime') }}
       <PrunLink inline command="XIT SET FEAT" />
     </p>
   </div>
