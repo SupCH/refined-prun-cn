@@ -74,7 +74,9 @@ function paramName(pkg: UserData.ActionPackageData) {
 
 <template>
   <ActionBar>
-    <div v-if="showQuickstart" v-html="t('act.quickstartHelp')" />
+    <div v-if="showQuickstart" :class="$style.quickstartLabel">
+      {{ t('act.quickstartHelp') }}
+    </div>
     <div v-if="showQuickstart">→</div>
     <PrunButton v-if="showQuickstart" primary @click="onQuickstartClick">{{
       t('act.quickstart')
@@ -133,6 +135,11 @@ function paramName(pkg: UserData.ActionPackageData) {
 </template>
 
 <style module>
+.quickstartLabel {
+  white-space: pre-wrap;
+  text-align: right;
+}
+
 .dragHeaderCell {
   padding: 0;
 }

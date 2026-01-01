@@ -21,6 +21,9 @@ import SectionHeader from '@src/components/SectionHeader.vue';
 import { useXitParameters } from '@src/hooks/use-xit-parameters';
 import PrunLink from '@src/components/PrunLink.vue';
 import { objectId } from '@src/utils/object-id';
+import PrunButton from '@src/components/PrunButton.vue';
+import QuickPurchaseDialog from '@src/features/XIT/shared/QuickPurchaseDialog.vue';
+import { showTileOverlay } from '@src/infrastructure/prun-ui/tile-overlay';
 
 const parameters = useXitParameters();
 
@@ -75,6 +78,29 @@ const materials = computed(() => {
 function calculateAge(lastRepair: number) {
   return diffDays(lastRepair, timestampEachMinute.value, true);
 }
+
+const repairMaterialsRecord = computed(() => {
+  if (!materials.value) {
+    return {};
+  }
+
+  const record: Record<string, number> = {};
+  for (const mat of materials.value) {
+    record[mat.material.ticker] = mat.amount;
+  }
+  return record;
+});
+
+function onQuickPurchaseClick(ev: Event) {
+  if (Object.keys(repairMaterialsRecord.value).length === 0) {
+    return;
+  }
+
+  showTileOverlay(ev, QuickPurchaseDialog, {
+    materials: repairMaterialsRecord.value,
+    packageNamePrefix: 'REP Quick Purchase',
+  });
+}
 </script>
 
 <template>
@@ -89,6 +115,14 @@ function calculateAge(lastRepair: number) {
       </Active>
     </form>
     <SectionHeader>{{ t('rep.shoppingCart') }}</SectionHeader>
+    <div :class="$style.quickPurchaseBar">
+      <PrunButton
+        primary
+        :disabled="Object.keys(repairMaterialsRecord).length === 0"
+        @click="onQuickPurchaseClick">
+        {{ t('rep.quickPurchase') }}
+      </PrunButton>
+    </div>
     <MaterialPurchaseTable
       :collapsible="isMultiTarget"
       :collapsed-by-default="true"
@@ -122,3 +156,11 @@ function calculateAge(lastRepair: number) {
     </table>
   </template>
 </template>
+
+<style module>
+.quickPurchaseBar {
+  margin: 8px 0;
+  display: flex;
+  justify-content: flex-end;
+}
+</style>

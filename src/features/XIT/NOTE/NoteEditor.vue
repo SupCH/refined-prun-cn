@@ -6,41 +6,34 @@ const { note } = defineProps<{ note: UserData.Note }>();
 
 const $style = useCssModule();
 
-const renderedText = computed(() => processText(note.text));
-
-function processText(text?: string) {
+const segments = computed(() => {
+  const text = note.text;
   if (text === undefined) {
-    return '';
+    return [];
   }
 
-  // Account for final new lines
-  if (text[text.length - 1] == '\n') {
-    text += ' ';
-  }
+  const regexp = /\b(?:[a-zA-Z0-9]{1,3}\.(?:CI1|IC1|AI1|NC1|CI2|NC2))\b/g;
+  const result: { text: string; isLink: boolean }[] = [];
+  let lastIndex = 0;
+  let match;
 
-  // Allow for HTML tags
-  text = text.replaceAll('&', '&amp;').replaceAll('<', '&lt;');
-
-  const regexp = /\b(?:[a-zA-Z0-9]{1,3}\.(?:CI1|IC1|AI1|NC1|CI2|NC2))(?!<)/g;
-  let counter = 0;
-  while (true) {
-    const matches = text.match(regexp);
-    if (!matches) {
-      break;
+  while ((match = regexp.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      result.push({ text: text.substring(lastIndex, match.index), isLink: false });
     }
-
-    text = text.replaceAll(
-      regexp,
-      match => `<span class="${C.Link.link} ${$style.link}">${match}</span>`,
-    );
-
-    counter++;
-    if (counter > 100) {
-      break;
-    }
+    result.push({ text: match[0], isLink: true });
+    lastIndex = regexp.lastIndex;
   }
-  return text;
-}
+
+  if (lastIndex < text.length) {
+    result.push({ text: text.substring(lastIndex), isLink: false });
+  } else if (text[text.length - 1] === '\n') {
+    // Account for final new line
+    result.push({ text: ' ', isLink: false });
+  }
+
+  return result;
+});
 
 const textbox = useTemplateRef<HTMLTextAreaElement>('textbox');
 const overlay = useTemplateRef<HTMLPreElement>('overlay');
@@ -52,19 +45,9 @@ onMounted(() => {
   });
 });
 
-watch(
-  renderedText,
-  async () => {
-    await nextTick();
-    const links = overlay.value?.getElementsByClassName($style.link) ?? [];
-    for (const link of Array.from(links)) {
-      link.addEventListener('click', () => {
-        showBuffer(`CXPO ${link.textContent}`);
-      });
-    }
-  },
-  { immediate: true },
-);
+function onLinkClick(text: string) {
+  showBuffer(`CXPO ${text}`);
+}
 </script>
 
 <template>
@@ -72,8 +55,16 @@ watch(
   <div :class="$style.header">{{ note.name }}</div>
   <div>
     <textarea ref="textbox" v-model="note.text" :class="$style.textarea" spellcheck="false" />
-    <!-- eslint-disable-next-line vue/no-v-html -->
-    <pre ref="overlay" :class="$style.overlay" v-html="renderedText" />
+    <pre ref="overlay" :class="$style.overlay">
+      <template v-for="(segment, i) in segments" :key="i">
+        <span
+          v-if="segment.isLink"
+          :class="[C.Link.link, $style.link]"
+          @click="onLinkClick(segment.text)"
+        >{{ segment.text }}</span>
+        <template v-else>{{ segment.text }}</template>
+      </template>
+    </pre>
   </div>
 </template>
 

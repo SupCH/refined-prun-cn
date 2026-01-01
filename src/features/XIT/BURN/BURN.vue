@@ -14,6 +14,10 @@ import { countDays } from '@src/features/XIT/BURN/utils';
 import InlineFlex from '@src/components/InlineFlex.vue';
 import { findWithQuery } from '@src/utils/find-with-query';
 import { convertToPlanetNaturalId } from '@src/core/planet-natural-id';
+import PrunButton from '@src/components/PrunButton.vue';
+import QuickPurchaseDialog from '@src/features/XIT/shared/QuickPurchaseDialog.vue';
+import { showTileOverlay } from '@src/infrastructure/prun-ui/tile-overlay';
+import { userData } from '@src/store/user-data';
 
 const parameters = useXitParameters();
 
@@ -167,6 +171,43 @@ function onExpandAllClick() {
     expand.value = planetBurn.value?.map(x => x.naturalId) ?? [];
   }
 }
+
+// Calculate materials that need resupply based on BURN needs
+const materialsNeedingResupply = computed(() => {
+  if (!planetBurn.value) {
+    return {};
+  }
+
+  const resupplyDays = userData.settings.burn.resupply;
+  const materials: Record<string, number> = {};
+
+  for (const burn of planetBurn.value) {
+    for (const [ticker, burnData] of Object.entries(burn.burn)) {
+      if (burnData.dailyAmount >= 0) {
+        // Material is being produced or not consumed
+        continue;
+      }
+
+      const need = Math.max(0, resupplyDays * -burnData.dailyAmount - burnData.inventory);
+      if (need > 0) {
+        materials[ticker] = (materials[ticker] || 0) + need;
+      }
+    }
+  }
+
+  return materials;
+});
+
+function onQuickPurchaseClick(ev: Event) {
+  if (Object.keys(materialsNeedingResupply.value).length === 0) {
+    return;
+  }
+
+  showTileOverlay(ev, QuickPurchaseDialog, {
+    materials: materialsNeedingResupply.value,
+    packageNamePrefix: 'BURN Quick Purchase',
+  });
+}
 </script>
 
 <template>
@@ -177,6 +218,14 @@ function onExpandAllClick() {
       <RadioItem v-model="yellow" horizontal>{{ t('burn.yellow') }}</RadioItem>
       <RadioItem v-model="green" horizontal>{{ t('burn.green') }}</RadioItem>
       <RadioItem v-model="inf" horizontal>{{ t('burn.inf') }}</RadioItem>
+    </div>
+    <div :class="$style.quickPurchaseBar">
+      <PrunButton
+        primary
+        :disabled="Object.keys(materialsNeedingResupply).length === 0"
+        @click="onQuickPurchaseClick">
+        {{ t('burn.quickPurchase') }}
+      </PrunButton>
     </div>
     <table>
       <thead>
@@ -226,5 +275,11 @@ function onExpandAllClick() {
   font-size: 12px;
   padding-left: 18px;
   font-weight: bold;
+}
+
+.quickPurchaseBar {
+  margin: 8px 0;
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

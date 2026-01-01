@@ -6,8 +6,11 @@
   "minimum_chrome_version": "107",
   "browser_specific_settings": {
     "gecko": {
-      "id": "{c35c3edc-0acc-4531-b01c-35b6bede69fb}",
-      "strict_min_version": "109.0"
+      "id": "refined-prun-cn@supch.github.io",
+      "strict_min_version": "128.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
     }
   },
   "permissions": [
