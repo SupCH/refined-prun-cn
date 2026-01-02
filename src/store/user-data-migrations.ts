@@ -6,6 +6,27 @@ type Migration = [id: string, migration: (userData: any) => void];
 // New migrations should be added to the top of the list.
 const migrations: Migration[] = [
   [
+    '02.01.2026 Fix action package names',
+    userData => {
+      // Migrate old package names with spaces to underscore format
+      if (userData.actionPackages && Array.isArray(userData.actionPackages)) {
+        let migrated = 0;
+        for (const pkg of userData.actionPackages) {
+          if (pkg.global?.name && pkg.global.name.includes(' ')) {
+            const oldName = pkg.global.name;
+            // Replace spaces with underscores and remove colons
+            pkg.global.name = oldName.replace(/\s+/g, '_').replace(/:/g, '');
+            migrated++;
+            console.log(`[Migration] Fixed package name: "${oldName}" -> "${pkg.global.name}"`);
+          }
+        }
+        if (migrated > 0) {
+          console.log(`[Migration] Fixed ${migrated} action package name(s)`);
+        }
+      }
+    },
+  ],
+  [
     '25.12.2025 Rename features',
     userData => {
       renameFeature('custom-item-sorting', 'inv-custom-item-sorting');
