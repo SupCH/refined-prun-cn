@@ -1,0 +1,17 @@
+import { $ } from './select-dom.js';
+import tiles from './tiles.js';
+import features from './feature-registry.js';
+async function focusSearchBar(tile) {
+  if (tile.parameter) {
+    return;
+  }
+  if (tile.docked) {
+    return;
+  }
+  const input = await $(tile.anchor, 'input');
+  input.focus();
+}
+function init() {
+  tiles.observe(['PLI', 'SYSI'], focusSearchBar);
+}
+features.add(import.meta.url, init, 'Auto-focuses the search bar in PLI and SYSI.');

@@ -1,0 +1,96 @@
+import { userData } from './user-data.js';
+import { watch } from './runtime-core.esm-bundler.js';
+let matchers = null;
+watch(userData, () => (matchers = null), { immediate: true, deep: true });
+const defaultSize = [450, 300];
+function matchBufferSize(command) {
+  if (!matchers) {
+    matchers = userData.settings.buffers
+      .filter(x => !!x[0] && typeof x[1] === 'number' && typeof x[2] === 'number')
+      .map(x => {
+        const rule = x[0] === '*' ? '.*' : x[0];
+        return [new RegExp(rule.toUpperCase()), x[1], x[2]];
+      });
+  }
+  const commandUpper = command.toUpperCase().trim();
+  for (const matcher of matchers) {
+    const match = commandUpper.match(matcher[0]);
+    if (match) {
+      return [matcher[1], matcher[2]];
+    }
+  }
+  if (commandUpper === 'PLI' || commandUpper === 'SYSI') {
+    return defaultSize.slice();
+  }
+  const commandParts = commandUpper.split(' ');
+  let keyword = commandParts[0];
+  if (keyword === 'XIT' && commandParts.length > 1) {
+    keyword = commandParts[1].split('_')[0];
+    return defaultXitBufferSizes[keyword];
+  }
+  return defaultBufferSizes[keyword];
+}
+function increaseDefaultBufferSize(keyword, delta) {
+  let size = defaultBufferSizes[keyword];
+  if (size === void 0) {
+    size = defaultSize.slice();
+    defaultBufferSizes[keyword] = size;
+  }
+  size[0] += delta.width ?? 0;
+  size[1] += delta.height ?? 0;
+}
+const defaultBufferSizes = {
+  ADM: [380, 550],
+  BBC: [500, 450],
+  BLU: [550, 600],
+  BS: [610, 300],
+  BSC: [550, 620],
+  BTF: [570, 700],
+  BUI: [500, 400],
+  COGC: [500, 580],
+  CONT: [600, 400],
+  CONTD: [450, 550],
+  CONTS: [550, 300],
+  CORPARC: [350, 550],
+  CORPNP: [450, 430],
+  CORPP: [460, 640],
+  CX: [550, 600],
+  CXL: [600, 180],
+  CXM: [625, 300],
+  CXOS: [750, 300],
+  CXPO: [450, 310],
+  FLT: [650, 180],
+  GOV: [470, 550],
+  HQ: [450, 600],
+  INV: [530, 250],
+  LEAD: [700, 400],
+  LM: [500, 580],
+  LMA: [425, 370],
+  LMOS: [700, 420],
+  LMP: [450, 500],
+  MAT: [500, 400],
+  MOTS: [600, 450],
+  MU: [512, 512],
+  NOTS: [425, 625],
+  PLI: [450, 600],
+  POPI: [550, 300],
+  POPID: [460, 500],
+  POPR: [515, 400],
+  PROD: [400, 500],
+  PRODCO: [415, 600],
+  PRODQ: [650, 300],
+  SHP: [450, 450],
+  SHY: [450, 450],
+  STEAM: [300, 450],
+  STNS: [400, 280],
+  SYSI: [600, 600],
+  WAR: [400, 580],
+  WF: [710, 300],
+};
+const defaultXitBufferSizes = {
+  CALC: [275, 326],
+  YAPT: [1100, 700],
+  PRUNSTAT: [830, 680],
+  PRUNSTATS: [830, 680],
+};
+export { increaseDefaultBufferSize, matchBufferSize };

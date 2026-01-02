@@ -14,26 +14,47 @@ import {
 import { materialsStore } from '@src/infrastructure/prun-api/data/materials';
 import { fixed0 } from '@src/utils/format';
 import { showBuffer } from '@src/infrastructure/prun-ui/buffers';
+import dayjs from 'dayjs';
+import { t } from '@src/infrastructure/i18n';
 
 import { PlanetBurn } from '@src/core/burn';
 
 const props = defineProps<{
   materials?: Record<string, number>;
-  rawBurnData?: PlanetBurn[];
   packageNamePrefix: string;
+  rawBurnData?: PlanetBurn[];
 }>();
 
-const emit = defineEmits<{
-  close: [];
-}>();
+const emit = defineEmits<(e: 'close') => void>();
 
 const exchanges = ['AI1', 'CI1', 'IC1', 'NC1', 'CI2', 'NC2'];
-const selectedExchange = ref('IC1');
+const selectedExchange = ref<string>('UNIVERSE');
+const selectedShip = ref<string | undefined>(undefined);
+const shipStorages = ref<any[]>([]);
+const selectedSites = ref<string[]>([]);
+const resupplyDays = ref<number>(userData.settings.burn.resupply);
 
-const resupplyDays = ref(userData.settings.burn.resupply);
-const selectedSites = ref<string[]>(
-  props.rawBurnData?.map(s => s.naturalId).filter(id => id !== '') ?? [],
-);
+const consumableCategories = [
+  'food and luxury consumables',
+  'consumables (basic)',
+  'medical supplies',
+  'ship parts',
+  'ship engines',
+  'ship shields',
+];
+
+onMounted(async () => {
+  shipStorages.value = await getShipStorages();
+  if (shipStorages.value.length > 0) {
+    selectedShip.value = shipStorages.value[0].addressableId;
+  }
+
+  if (props.rawBurnData) {
+    selectedSites.value = props.rawBurnData
+      .filter(burn => burn.naturalId !== '')
+      .map(burn => burn.naturalId);
+  }
+});
 
 const computedMaterials = computed(() => {
   if (props.rawBurnData) {
@@ -54,8 +75,6 @@ const computedMaterials = computed(() => {
   return props.materials || {};
 });
 
-const shipStorages = computed(() => getShipStorages());
-
 const shipOptions = computed(() =>
   shipStorages.value.map(ship => ({
     value: ship.addressableId,
@@ -63,34 +82,23 @@ const shipOptions = computed(() =>
   })),
 );
 
-const selectedShip = ref(shipOptions.value[0]?.value ?? '');
-
-// Consumable categories (food, basic consumables, medical, etc.)
-const consumableCategories = [
-  'food and luxury consumables',
-  'consumables (basic)',
-  'medical supplies',
-  'ship parts',
-  'ship engines',
-  'ship shields',
-];
-
 const materialList = computed(() => {
   const allMaterials = Object.entries(computedMaterials.value)
+    .sort((a, b) => a[0].localeCompare(b[0]))
     .map(([ticker, amount]) => {
       const material = materialsStore.getByTicker(ticker);
       return {
         ticker,
-        name: material?.name ?? ticker,
-        amount: Math.ceil(amount),
-        category: material?.category ?? 'unknown',
+        name: material?.name || ticker,
+        amount,
+        category: material?.category || '',
       };
-    })
-    .sort((a, b) => a.ticker.localeCompare(b.ticker));
+    });
 
   const consumables = allMaterials.filter(m =>
     consumableCategories.some(cat => m.category.toLowerCase().includes(cat)),
   );
+
   const rawMaterials = allMaterials.filter(
     m => !consumableCategories.some(cat => m.category.toLowerCase().includes(cat)),
   );
@@ -117,7 +125,10 @@ function onConfirm() {
     return;
   }
 
-  const packageName = generatePackageName(props.packageNamePrefix);
+  // Ensure package name is strictly sanitized locally to bypass any potential module caching issues
+  const timestamp = dayjs().format('YYYY-MM-DD_HHmm');
+  const safePrefix = props.packageNamePrefix.replace(/[^a-zA-Z0-9]/g, '_');
+  const packageName = `${safePrefix}_${timestamp}`;
   const pkg = createQuickPurchasePackage(
     packageName,
     computedMaterials.value,

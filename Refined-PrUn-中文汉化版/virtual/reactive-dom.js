@@ -1,0 +1,45 @@
+import { ref } from './reactivity.esm-bundler.js';
+function refTextContent(element) {
+  const textContent = ref(element.textContent);
+  const observer = new MutationObserver(() => (textContent.value = element.textContent));
+  observer.observe(element, { childList: true, subtree: true, characterData: true });
+  return textContent;
+}
+function refValue(element) {
+  return refAnimationFrame(element, x => x.value);
+}
+function refAttributeValue(element, name) {
+  const value = ref(element.getAttribute(name));
+  const observer = new MutationObserver(() => (value.value = element.getAttribute(name)));
+  observer.observe(element, { attributes: true });
+  return value;
+}
+let animationFrameUpdates = [];
+function refAnimationFrame(element, getter) {
+  const value = ref(getter(element));
+  animationFrameUpdates.push(() => {
+    if (element.isConnected) {
+      value.value = getter(element);
+      return true;
+    }
+    return false;
+  });
+  if (animationFrameUpdates.length === 1) {
+    runAnimationFrameUpdates();
+  }
+  return value;
+}
+function runAnimationFrameUpdates() {
+  const next = [];
+  for (const update of animationFrameUpdates) {
+    if (update()) {
+      next.push(update);
+    }
+  }
+  animationFrameUpdates = next;
+  if (animationFrameUpdates.length > 0) {
+    requestAnimationFrame(runAnimationFrameUpdates);
+  }
+}
+runAnimationFrameUpdates();
+export { refAnimationFrame, refAttributeValue, refTextContent, refValue };

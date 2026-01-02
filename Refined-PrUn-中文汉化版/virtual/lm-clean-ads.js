@@ -1,0 +1,72 @@
+import { subscribe } from './subscribe-async-generator.js';
+import { $, _$$, $$ } from './select-dom.js';
+import { C } from './prun-css.js';
+import tiles from './tiles.js';
+import features from './feature-registry.js';
+import { getPrunId } from './attributes.js';
+import { localAdsStore } from './local-ads.js';
+import { extractPlanetName } from './util.js';
+function onTileReady(tile) {
+  subscribe($$(tile.anchor, C.CommodityAd.container), async container => {
+    const text = await $(container, C.CommodityAd.text);
+    const id = getPrunId(container);
+    const ad = localAdsStore.getById(id);
+    if (!ad) {
+      return;
+    }
+    const type = ad.type;
+    const quantity = ad.quantity;
+    if (type === 'COMMODITY_SHIPPING') {
+      const links = _$$(text, C.Link.link);
+      if (links.length === 2) {
+        links[0].textContent = extractPlanetName(links[0].textContent);
+        links[0].previousSibling.textContent = ' ';
+        links[0].nextSibling.textContent = ' → ';
+        links[1].textContent = extractPlanetName(links[1].textContent);
+      }
+    }
+    if ((type === 'COMMODITY_BUYING' || type === 'COMMODITY_SELLING') && quantity) {
+      const amount = quantity.amount;
+      text.childNodes[1].textContent = ` ${amount} @ `;
+    }
+    for (const node of Array.from(text.childNodes)) {
+      if (!node.textContent) {
+        continue;
+      }
+      if (node.textContent.endsWith('.00')) {
+        node.textContent = node.textContent.replace('.00', '');
+      }
+      if (node.textContent.endsWith(',00')) {
+        node.textContent = node.textContent.replace(',00', '');
+      }
+      node.textContent = node.textContent
+        .replace(' for ', '')
+        .replace('delivery', '')
+        .replace('collection', '')
+        .replace(' within ', ' in ')
+        .replace('for delivery within', 'in');
+      node.textContent = node.textContent.replace(/(\d+)\s+days*/i, '$1d');
+    }
+    cleanContractType(text, ad);
+  });
+}
+function cleanContractType(text, ad) {
+  if (!text.firstChild) {
+    return;
+  }
+  switch (ad.type) {
+    case 'COMMODITY_SHIPPING':
+      text.firstChild.textContent = '';
+      break;
+    case 'COMMODITY_BUYING':
+      text.firstChild.textContent = 'BUY';
+      break;
+    case 'COMMODITY_SELLING':
+      text.firstChild.textContent = 'SELL';
+      break;
+  }
+}
+function init() {
+  tiles.observe('LM', onTileReady);
+}
+features.add(import.meta.url, init, 'LM: Hides redundant information from ads.');

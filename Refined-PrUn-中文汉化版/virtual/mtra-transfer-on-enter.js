@@ -1,0 +1,38 @@
+import { subscribe } from './subscribe-async-generator.js';
+import { $, _$$, $$ } from './select-dom.js';
+import { C } from './prun-css.js';
+import tiles from './tiles.js';
+import features from './feature-registry.js';
+function onTileReady(tile) {
+  subscribe($$(tile.anchor, 'input'), async input => {
+    if (input.type !== 'text') {
+      return;
+    }
+    const transfer = await $(tile.anchor, C.Button.btn);
+    input.addEventListener('keydown', async e => {
+      if (e.key !== 'Enter') {
+        return;
+      }
+      transfer.click();
+      if (tile.docked) {
+        return;
+      }
+      await Promise.any([
+        $(tile.frame, C.ActionFeedback.success),
+        $(tile.frame, C.ActionFeedback.error),
+      ]);
+      await $(tile.frame, C.ActionFeedback.success);
+      const window = tile.frame.closest(`.${C.Window.window}`);
+      const close = _$$(window, C.Window.button).at(-1);
+      close?.click();
+    });
+  });
+}
+function init() {
+  tiles.observe('MTRA', onTileReady);
+}
+features.add(
+  import.meta.url,
+  init,
+  'MTRA: Triggers transfer on Enter and closes the buffer on success.',
+);

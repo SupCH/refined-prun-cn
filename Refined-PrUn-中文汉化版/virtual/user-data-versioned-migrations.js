@@ -1,0 +1,99 @@
+import removeArrayElement from './remove-array-element.js';
+import { tilesStore } from './tiles2.js';
+import { getInvStore } from './store-id.js';
+function migrateVersionedUserData(userData) {
+  if (userData.version < 10) {
+    userData.tabs = {
+      order: [],
+      hidden: [],
+    };
+  }
+  if (userData.version < 11) {
+    let convertDueDate = function (task) {
+      if (task.dueDate) {
+        const [year, month, day] = task.dueDate.split('-').map(x => parseInt(x, 10));
+        const date = new Date(year, month - 1, day);
+        task.dueDate = date.getTime();
+      }
+      if (task.subtasks) {
+        for (const subtask of task.subtasks) {
+          convertDueDate(subtask);
+        }
+      }
+    };
+    for (const list of userData.todo) {
+      for (const task of list.tasks) {
+        convertDueDate(task);
+      }
+    }
+  }
+  if (userData.version < 12) {
+    userData.commandLists = [];
+  }
+  if (userData.version < 13) {
+    removeArrayElement(userData.settings.disabled, 'hide-bfrs-button');
+  }
+  if (userData.version < 14) {
+    userData.settings.buffers = [];
+  }
+  if (userData.version < 15) {
+    removeArrayElement(userData.settings.disabled, 'productivity-through-depression');
+  }
+  if (userData.version < 16) {
+    removeArrayElement(userData.settings.disabled, 'mtra-sync-amount-slider');
+  }
+  if (userData.version < 17) {
+    removeArrayElement(userData.settings.disabled, 'nots-ship-name');
+  }
+  if (userData.version < 18) {
+    const sorting = {};
+    for (const mode of userData.sorting) {
+      const store = getInvStore(mode.storeId);
+      if (!store) {
+        continue;
+      }
+      const storeSorting = (sorting[store.id] ??= { modes: [] });
+      storeSorting.modes.push(mode);
+      delete mode.storeId;
+    }
+    userData.sorting = sorting;
+    for (const tileId of Object.keys(userData.tileState)) {
+      const tile = tilesStore.getById(tileId);
+      if (!tile?.content?.startsWith('INV')) {
+        continue;
+      }
+      const storeId = tile.content.substring(3);
+      const store = getInvStore(storeId);
+      const state = userData.tileState[tileId];
+      if (store) {
+        const storeSorting = (sorting[store.id] ??= { modes: [] });
+        storeSorting.active = state.activeSort !== void 0 ? state.activeSort : void 0;
+        storeSorting.cat = state.catSort !== void 0 ? state.catSort : void 0;
+        storeSorting.reverse = state.reverseSort !== void 0 ? state.reverseSort : void 0;
+      }
+      delete state.activeSort;
+      delete state.catSort;
+      delete state.reverseSort;
+    }
+  }
+  if (userData.version < 19) {
+    removeArrayElement(userData.settings.disabled, 'contd-fill-condition-address');
+  }
+  if (userData.version < 20) {
+    removeArrayElement(userData.settings.disabled, 'shipment-item-detail');
+  }
+  if (userData.version < 21) {
+    userData.settings.defaultChartType = 'SMOOTH';
+  }
+  if (userData.version < 22) {
+    userData.tabs.locked = [];
+  }
+  if (userData.version < 23) {
+    for (const data of Object.values(userData.sorting)) {
+      for (const mode of data.modes) {
+        delete mode.storeId;
+      }
+    }
+  }
+}
+export { migrateVersionedUserData };
