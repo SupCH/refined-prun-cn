@@ -65,17 +65,37 @@ const shipOptions = computed(() =>
 
 const selectedShip = ref(shipOptions.value[0]?.value ?? '');
 
+// Consumable categories (food, basic consumables, medical, etc.)
+const consumableCategories = [
+  'food and luxury consumables',
+  'consumables (basic)',
+  'medical supplies',
+  'ship parts',
+  'ship engines',
+  'ship shields',
+];
+
 const materialList = computed(() => {
-  return Object.entries(computedMaterials.value)
+  const allMaterials = Object.entries(computedMaterials.value)
     .map(([ticker, amount]) => {
       const material = materialsStore.getByTicker(ticker);
       return {
         ticker,
         name: material?.name ?? ticker,
         amount: Math.ceil(amount),
+        category: material?.category ?? 'unknown',
       };
     })
     .sort((a, b) => a.ticker.localeCompare(b.ticker));
+
+  const consumables = allMaterials.filter(m =>
+    consumableCategories.some(cat => m.category.toLowerCase().includes(cat)),
+  );
+  const rawMaterials = allMaterials.filter(
+    m => !consumableCategories.some(cat => m.category.toLowerCase().includes(cat)),
+  );
+
+  return { consumables, rawMaterials, all: allMaterials };
 });
 
 function toggleSite(naturalId: string) {
@@ -106,8 +126,8 @@ function onConfirm() {
   );
 
   const pkgName = addAndNavigateToPackage(pkg);
-  // Use showBuffer with underscore-separated format
-  showBuffer(`XIT ACT_EDIT_${pkgName.split(' ').join('_')}`);
+  // Package name is already sanitized (no spaces or special chars)
+  showBuffer(`XIT ACT_EDIT_${pkgName}`);
   emit('close');
 }
 </script>
@@ -137,24 +157,52 @@ function onConfirm() {
 
     <div :class="$style.section">
       <h3>{{ t('quickPurchase.materialList') }}</h3>
-      <div :class="$style.scrollTable">
-        <table :class="$style.materialTable">
-          <thead>
-            <tr>
-              <th>{{ t('quickPurchase.material') }}</th>
-              <th>{{ t('quickPurchase.amount') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in materialList" :key="item.ticker">
-              <td>{{ item.ticker }}</td>
-              <td>{{ fixed0(item.amount) }}</td>
-            </tr>
-            <tr v-if="materialList.length === 0">
-              <td colspan="2" :class="$style.empty">{{ t('quickPurchase.noMaterials') }}</td>
-            </tr>
-          </tbody>
-        </table>
+
+      <!-- Consumables Section -->
+      <div v-if="materialList.consumables.length > 0">
+        <h4 :class="$style.categoryTitle">{{ t('quickPurchase.consumables') }}</h4>
+        <div :class="$style.scrollTable">
+          <table :class="$style.materialTable">
+            <thead>
+              <tr>
+                <th>{{ t('quickPurchase.material') }}</th>
+                <th>{{ t('quickPurchase.amount') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in materialList.consumables" :key="item.ticker">
+                <td>{{ item.ticker }}</td>
+                <td>{{ fixed0(item.amount) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Raw Materials Section -->
+      <div v-if="materialList.rawMaterials.length > 0" :class="$style.rawMaterialsSection">
+        <h4 :class="$style.categoryTitle">{{ t('quickPurchase.rawMaterials') }}</h4>
+        <div :class="$style.scrollTable">
+          <table :class="$style.materialTable">
+            <thead>
+              <tr>
+                <th>{{ t('quickPurchase.material') }}</th>
+                <th>{{ t('quickPurchase.amount') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in materialList.rawMaterials" :key="item.ticker">
+                <td>{{ item.ticker }}</td>
+                <td>{{ fixed0(item.amount) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div v-if="materialList.all.length === 0" :class="$style.empty">
+        {{ t('quickPurchase.noMaterials') }}
       </div>
     </div>
 
@@ -169,7 +217,10 @@ function onConfirm() {
     </form>
 
     <div :class="$style.buttons">
-      <PrunButton primary :disabled="!selectedShip || materialList.length === 0" @click="onConfirm">
+      <PrunButton
+        primary
+        :disabled="!selectedShip || materialList.all.length === 0"
+        @click="onConfirm">
         {{ t('quickPurchase.confirm') }}
       </PrunButton>
       <PrunButton @click="emit('close')">
@@ -187,6 +238,17 @@ function onConfirm() {
 
 .section {
   margin: 16px 0;
+}
+
+.categoryTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 12px 0 8px 0;
+  color: var(--color-text);
+}
+
+.rawMaterialsSection {
+  margin-top: 16px;
 }
 
 .materialTable {
