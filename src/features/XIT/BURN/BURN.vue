@@ -199,12 +199,12 @@ const materialsNeedingResupply = computed(() => {
 });
 
 function onQuickPurchaseClick(ev: Event) {
-  if (Object.keys(materialsNeedingResupply.value).length === 0) {
+  if (!planetBurn.value || planetBurn.value.length === 0) {
     return;
   }
 
   showTileOverlay(ev, QuickPurchaseDialog, {
-    materials: materialsNeedingResupply.value,
+    rawBurnData: planetBurn.value,
     packageNamePrefix: 'BURN Quick Purchase',
   });
 }
