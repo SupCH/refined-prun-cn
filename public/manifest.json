@@ -1,6 +1,9 @@
 {
   "name": "Refined PrUn",
-  "version": "1.0.3",
+  "version": "1.1.0",
+  "short_name": "Refined PrUn CN",
+  "author": "SupCH",
+  "homepage_url": "https://github.com/SupCH/refined-prun-cn",
   "description": "Browser extension that simplifies the Prosperous Universe interface and adds useful features",
   "manifest_version": 3,
   "minimum_chrome_version": "107",

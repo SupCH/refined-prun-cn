@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/refined-prun/refined-prun.git"
+    "url": "https://github.com/SupCH/refined-prun-cn.git"
   },
   "scripts": {
     "compile": "tsc --noEmit",
