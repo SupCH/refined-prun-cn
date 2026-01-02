@@ -18,6 +18,7 @@ import PrunButton from '@src/components/PrunButton.vue';
 import QuickPurchaseDialog from '@src/features/XIT/shared/QuickPurchaseDialog.vue';
 import { showTileOverlay } from '@src/infrastructure/prun-ui/tile-overlay';
 import { userData } from '@src/store/user-data';
+import { t } from '@src/infrastructure/i18n';
 
 const parameters = useXitParameters();
 

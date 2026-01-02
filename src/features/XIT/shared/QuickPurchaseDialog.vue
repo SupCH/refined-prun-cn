@@ -8,11 +8,14 @@ import {
   getShipStorages,
   serializeShipStorage,
   createQuickPurchasePackage,
+  createPriceFetchPackage,
   addAndNavigateToPackage,
   generatePackageName,
 } from '@src/features/XIT/shared/quick-purchase-utils';
 import { materialsStore } from '@src/infrastructure/prun-api/data/materials';
-import { fixed0 } from '@src/utils/format';
+import { materialCategoriesStore } from '@src/infrastructure/prun-api/data/material-categories';
+import { cxobStore } from '@src/infrastructure/prun-api/data/cxob';
+import { fixed0, fixed02 } from '@src/utils/format';
 import { showBuffer } from '@src/infrastructure/prun-ui/buffers';
 import dayjs from 'dayjs';
 import { t } from '@src/infrastructure/i18n';
@@ -28,26 +31,38 @@ const props = defineProps<{
 const emit = defineEmits<(e: 'close') => void>();
 
 const exchanges = ['AI1', 'CI1', 'IC1', 'NC1', 'CI2', 'NC2'];
-const selectedExchange = ref<string>('UNIVERSE');
+const selectedExchange = ref<string>('AI1');
 const selectedShip = ref<string | undefined>(undefined);
 const shipStorages = ref<any[]>([]);
 const selectedSites = ref<string[]>([]);
 const resupplyDays = ref<number>(userData.settings.burn.resupply);
 
+// Material selection state
+const selectedMaterials = ref<Set<string>>(new Set());
+
 const consumableCategories = [
-  'food and luxury consumables',
-  'consumables (basic)',
-  'medical supplies',
-  'ship parts',
-  'ship engines',
-  'ship shields',
+  'food',
+  'beverage',
+  'drink',
+  'luxury',
+  'consumable',
+  'medical',
+  'apparel',
+  'clothing',
+  'wear',
+  'textile',
+  'provision',
+  'workforce',
+  'overall',
+  'ship part',
+  'ship engine',
+  'ship shield',
+  'fuel',
 ];
 
 onMounted(async () => {
   shipStorages.value = await getShipStorages();
-  if (shipStorages.value.length > 0) {
-    selectedShip.value = shipStorages.value[0].addressableId;
-  }
+  selectedShip.value = 'local';
 
   if (props.rawBurnData) {
     selectedSites.value = props.rawBurnData
@@ -75,23 +90,51 @@ const computedMaterials = computed(() => {
   return props.materials || {};
 });
 
-const shipOptions = computed(() =>
-  shipStorages.value.map(ship => ({
+// Auto-select all materials when they change
+watch(
+  computedMaterials,
+  newMaterials => {
+    Object.keys(newMaterials).forEach(ticker => selectedMaterials.value.add(ticker));
+  },
+  { immediate: true },
+);
+
+const shipOptions = computed(() => {
+  const options = shipStorages.value.map(ship => ({
     value: ship.addressableId,
     label: serializeShipStorage(ship),
-  })),
-);
+  }));
+
+  options.unshift({
+    value: 'local',
+    label: t('quickPurchase.localWarehouse'),
+  });
+
+  return options;
+});
 
 const materialList = computed(() => {
   const allMaterials = Object.entries(computedMaterials.value)
     .sort((a, b) => a[0].localeCompare(b[0]))
     .map(([ticker, amount]) => {
       const material = materialsStore.getByTicker(ticker);
+      const cxTicker = `${ticker}.${selectedExchange.value}`;
+      const orderBook = cxobStore.getByTicker(cxTicker);
+      let unitPrice: number | undefined = undefined;
+      if (orderBook && orderBook.sellingOrders.length > 0) {
+        // Get lowest ask price
+        const sortedOrders = orderBook.sellingOrders
+          .slice()
+          .sort((a, b) => a.limit.amount - b.limit.amount);
+        unitPrice = sortedOrders[0]?.limit.amount;
+      }
       return {
         ticker,
         name: material?.name || ticker,
         amount,
-        category: material?.category || '',
+        category: materialCategoriesStore.getById(material?.category)?.name || '',
+        unitPrice,
+        totalPrice: unitPrice ? unitPrice * amount : undefined,
       };
     });
 
@@ -115,14 +158,86 @@ function toggleSite(naturalId: string) {
   }
 }
 
+// Material selection functions
+function toggleMaterial(ticker: string) {
+  if (selectedMaterials.value.has(ticker)) {
+    selectedMaterials.value.delete(ticker);
+  } else {
+    selectedMaterials.value.add(ticker);
+  }
+}
+
+const isAllConsumablesSelected = computed(() => {
+  const consumables = materialList.value.consumables;
+  return consumables.length > 0 && consumables.every(m => selectedMaterials.value.has(m.ticker));
+});
+
+function toggleAllConsumables() {
+  if (isAllConsumablesSelected.value) {
+    materialList.value.consumables.forEach(m => selectedMaterials.value.delete(m.ticker));
+  } else {
+    materialList.value.consumables.forEach(m => selectedMaterials.value.add(m.ticker));
+  }
+}
+
+const isAllRawSelected = computed(() => {
+  const raw = materialList.value.rawMaterials;
+  return raw.length > 0 && raw.every(m => selectedMaterials.value.has(m.ticker));
+});
+
+function toggleAllRawMaterials() {
+  if (isAllRawSelected.value) {
+    materialList.value.rawMaterials.forEach(m => selectedMaterials.value.delete(m.ticker));
+  } else {
+    materialList.value.rawMaterials.forEach(m => selectedMaterials.value.add(m.ticker));
+  }
+}
+
+function clearAllSelections() {
+  selectedMaterials.value.clear();
+}
+
+// Calculate total estimated cost for selected materials
+const totalEstimatedCost = computed(() => {
+  let total = 0;
+  let hasAllPrices = true;
+  for (const item of materialList.value.all) {
+    if (selectedMaterials.value.has(item.ticker)) {
+      if (item.totalPrice) {
+        total += item.totalPrice;
+      } else {
+        hasAllPrices = false;
+      }
+    }
+  }
+  return { total, hasAllPrices };
+});
+
 function onConfirm() {
   if (!selectedShip.value) {
     return;
   }
 
-  const shipStorage = shipStorages.value.find(s => s.addressableId === selectedShip.value);
-  if (!shipStorage) {
+  let shipStorage: any = undefined;
+  if (selectedShip.value !== 'local') {
+    shipStorage = shipStorages.value.find(s => s.addressableId === selectedShip.value);
+    if (!shipStorage) {
+      return;
+    }
+  }
+
+  // Check if any materials are selected
+  if (selectedMaterials.value.size === 0) {
+    alert(t('quickPurchase.noMaterialsSelected'));
     return;
+  }
+
+  // Filter materials by selection
+  const filteredMaterials: Record<string, number> = {};
+  for (const [ticker, amount] of Object.entries(computedMaterials.value)) {
+    if (selectedMaterials.value.has(ticker)) {
+      filteredMaterials[ticker] = amount;
+    }
   }
 
   // Use space-based name for storage (project convention), but NO colons or special chars
@@ -130,13 +245,38 @@ function onConfirm() {
   const packageName = `${props.packageNamePrefix} ${timestamp}`;
   const pkg = createQuickPurchasePackage(
     packageName,
-    computedMaterials.value,
+    filteredMaterials,
     selectedExchange.value,
     shipStorage,
   );
 
   const pkgName = addAndNavigateToPackage(pkg);
   // Navigation command MUST use underscores instead of spaces
+  showBuffer(`XIT ACT_EDIT_${pkgName.split(' ').join('_')}`);
+  emit('close');
+}
+
+function openPrice(ticker: string) {
+  showBuffer(`CXPO ${ticker}.${selectedExchange.value}`);
+}
+
+function onCreatePriceFetch() {
+  const tickers: string[] = [];
+  for (const item of materialList.value.all) {
+    if (selectedMaterials.value.has(item.ticker)) {
+      tickers.push(item.ticker);
+    }
+  }
+
+  if (tickers.length === 0) {
+    alert(t('quickPurchase.noMaterialsSelected'));
+    return;
+  }
+
+  const timestamp = dayjs().format('YYYY-MM-DD HHmm');
+  const packageName = `FETCH ${selectedExchange.value} ${timestamp}`;
+  const pkg = createPriceFetchPackage(packageName, tickers, selectedExchange.value);
+  const pkgName = addAndNavigateToPackage(pkg);
   showBuffer(`XIT ACT_EDIT_${pkgName.split(' ').join('_')}`);
   emit('close');
 }
@@ -168,6 +308,36 @@ function onConfirm() {
     <div :class="$style.section">
       <h3>{{ t('quickPurchase.materialList') }}</h3>
 
+      <!-- Selection Buttons -->
+      <div :class="$style.selectionButtons">
+        <PrunButton
+          :primary="!isAllConsumablesSelected"
+          :danger="isAllConsumablesSelected"
+          @click="toggleAllConsumables">
+          {{
+            isAllConsumablesSelected
+              ? t('quickPurchase.deselectAllConsumables')
+              : t('quickPurchase.selectAllConsumables')
+          }}
+        </PrunButton>
+        <PrunButton
+          :primary="!isAllRawSelected"
+          :danger="isAllRawSelected"
+          @click="toggleAllRawMaterials">
+          {{
+            isAllRawSelected
+              ? t('quickPurchase.deselectAllRawMaterials')
+              : t('quickPurchase.selectAllRawMaterials')
+          }}
+        </PrunButton>
+        <PrunButton dark @click="clearAllSelections">{{
+          t('quickPurchase.clearSelections')
+        }}</PrunButton>
+        <span :class="$style.selectedCount"
+          >{{ t('quickPurchase.selected') }}: {{ selectedMaterials.size }}</span
+        >
+      </div>
+
       <!-- Consumables Section -->
       <div v-if="materialList.consumables.length > 0">
         <h4 :class="$style.categoryTitle">{{ t('quickPurchase.consumables') }}</h4>
@@ -175,14 +345,36 @@ function onConfirm() {
           <table :class="$style.materialTable">
             <thead>
               <tr>
+                <th style="width: 40px"></th>
                 <th>{{ t('quickPurchase.material') }}</th>
                 <th>{{ t('quickPurchase.amount') }}</th>
+                <th>{{ t('quickPurchase.unitPrice') }}</th>
+                <th>{{ t('quickPurchase.totalCost') }}</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in materialList.consumables" :key="item.ticker">
+              <tr
+                v-for="item in materialList.consumables"
+                :key="item.ticker"
+                @click="toggleMaterial(item.ticker)"
+                :class="$style.clickableRow">
+                <td>
+                  <input
+                    type="checkbox"
+                    :checked="selectedMaterials.has(item.ticker)"
+                    @click.stop="toggleMaterial(item.ticker)" />
+                </td>
                 <td>{{ item.ticker }}</td>
                 <td>{{ fixed0(item.amount) }}</td>
+                <td :class="{ [$style.noData]: !item.unitPrice }">
+                  <span v-if="item.unitPrice">{{ fixed02(item.unitPrice) }}</span>
+                  <span v-else @click.stop="openPrice(item.ticker)" :class="$style.loadLink">{{
+                    t('quickPurchase.load')
+                  }}</span>
+                </td>
+                <td :class="{ [$style.noData]: !item.totalPrice }">{{
+                  item.totalPrice ? fixed0(item.totalPrice) : '--'
+                }}</td>
               </tr>
             </tbody>
           </table>
@@ -196,14 +388,33 @@ function onConfirm() {
           <table :class="$style.materialTable">
             <thead>
               <tr>
+                <th style="width: 40px"></th>
                 <th>{{ t('quickPurchase.material') }}</th>
                 <th>{{ t('quickPurchase.amount') }}</th>
+                <th>{{ t('quickPurchase.unitPrice') }}</th>
+                <th>{{ t('quickPurchase.totalCost') }}</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in materialList.rawMaterials" :key="item.ticker">
+              <tr
+                v-for="item in materialList.rawMaterials"
+                :key="item.ticker"
+                @click="toggleMaterial(item.ticker)"
+                :class="$style.clickableRow">
+                <td>
+                  <input
+                    type="checkbox"
+                    :checked="selectedMaterials.has(item.ticker)"
+                    @click.stop="toggleMaterial(item.ticker)" />
+                </td>
                 <td>{{ item.ticker }}</td>
                 <td>{{ fixed0(item.amount) }}</td>
+                <td :class="{ [$style.noData]: !item.unitPrice }">{{
+                  item.unitPrice ? fixed02(item.unitPrice) : '--'
+                }}</td>
+                <td :class="{ [$style.noData]: !item.totalPrice }">{{
+                  item.totalPrice ? fixed0(item.totalPrice) : '--'
+                }}</td>
               </tr>
             </tbody>
           </table>
@@ -226,6 +437,27 @@ function onConfirm() {
       </Active>
     </form>
 
+    <!-- Total Cost Summary -->
+    <div :class="$style.totalCostSection" v-if="selectedMaterials.size > 0">
+      <span>{{ t('quickPurchase.estimatedTotal') }}: </span>
+      <strong v-if="totalEstimatedCost.hasAllPrices">{{ fixed0(totalEstimatedCost.total) }}</strong>
+      <span v-else :class="$style.noData"
+        >{{ fixed0(totalEstimatedCost.total) }}+ ({{ t('quickPurchase.missingPrices') }})</span
+      >
+    </div>
+
+    <!-- Price Fetch Helper -->
+    <div
+      :class="$style.fetchSection"
+      v-if="!totalEstimatedCost.hasAllPrices && selectedMaterials.size > 0">
+      <div :class="$style.fetchInfo">
+        {{ t('quickPurchase.createPriceFetchDesc') }}
+      </div>
+      <PrunButton @click="onCreatePriceFetch" :class="$style.fetchButton" primary>
+        {{ t('quickPurchase.createPriceFetch') }}
+      </PrunButton>
+    </div>
+
     <div :class="$style.buttons">
       <PrunButton
         primary
@@ -233,7 +465,7 @@ function onConfirm() {
         @click="onConfirm">
         {{ t('quickPurchase.confirm') }}
       </PrunButton>
-      <PrunButton @click="emit('close')">
+      <PrunButton primary @click="emit('close')">
         {{ t('quickPurchase.cancel') }}
       </PrunButton>
     </div>
@@ -334,5 +566,66 @@ function onConfirm() {
 
 .error {
   color: var(--color-error);
+}
+
+.selectionButtons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.selectedCount {
+  margin-left: auto;
+  font-weight: bold;
+  color: var(--color-text);
+}
+
+.clickableRow {
+  cursor: pointer;
+}
+
+.clickableRow:hover {
+  background: var(--color-background-lighter);
+}
+
+.noData {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.loadLink {
+  color: var(--color-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.loadLink:hover {
+  filter: brightness(1.2);
+}
+
+.fetchSection {
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fetchInfo {
+  font-size: 0.9em;
+  color: var(--color-text-subtle);
+  margin-right: 12px;
+  flex: 1;
+}
+
+.fetchButton {
+  white-space: nowrap;
+  font-size: 0.9em;
+  padding: 4px 8px;
 }
 </style>

@@ -62,7 +62,7 @@ declare namespace UserData {
     consumablesOnly?: boolean;
   }
 
-  type ActionType = 'CX Buy' | 'MTRA' | 'Refuel';
+  type ActionType = 'CX Buy' | 'MTRA' | 'Refuel' | 'CX Fetch';
 
   interface ActionData {
     type: ActionType;
@@ -80,6 +80,7 @@ declare namespace UserData {
 
     origin?: string;
     dest?: string;
+    tickers?: string[];
   }
 
   interface TaskList {

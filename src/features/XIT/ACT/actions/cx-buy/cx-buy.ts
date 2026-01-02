@@ -4,6 +4,7 @@ import { CXPO_BUY } from '@src/features/XIT/ACT/action-steps/CXPO_BUY';
 import { fixed0, fixed02 } from '@src/utils/format';
 import { fillAmount } from '@src/features/XIT/ACT/actions/cx-buy/utils';
 import { AssertFn } from '@src/features/XIT/ACT/shared-types';
+import { t } from '@src/infrastructure/i18n';
 
 act.addAction({
   type: 'CX Buy',
@@ -12,7 +13,7 @@ act.addAction({
       return '--';
     }
 
-    return 'Buying group ' + action.group + ' from ' + action.exchange;
+    return t('act.buyingGroup', action.group, action.exchange);
   },
   editComponent: Edit,
   generateSteps: async ctx => {
@@ -24,27 +25,40 @@ act.addAction({
     const materials = await getMaterialGroup(data.group);
     assert(materials, 'Invalid material group');
 
+    // Defensive check: if materials is still undefined/null after assert, fail early
+    if (!materials) {
+      fail(`Material group "${data.group}" not found or returned no materials`);
+      return;
+    }
+
     const exchange = data.exchange;
     assert(exchange, 'Missing exchange');
 
     // Take out materials in CX inventory if requested
     if ((data.useCXInv ?? true) && data.exchange) {
-      for (const mat of Object.keys(materials)) {
-        for (const CXMat of Object.keys(state.WAR[data.exchange])) {
-          if (CXMat === mat) {
-            // Amount of material used (minimum of needed and had on hand)
-            const used = Math.min(materials[mat], state.WAR[data.exchange][CXMat]);
-            materials[mat] -= used;
-            state.WAR[data.exchange][CXMat] -= used;
-            if (state.WAR[data.exchange][mat] <= 0) {
-              // Remove material from CX Inv is already allocated
-              delete state.WAR[data.exchange][CXMat];
+      // Defensive check: ensure exchange warehouse data exists
+      if (!state.WAR[data.exchange]) {
+        log.warning(
+          `No warehouse data found for exchange ${data.exchange}, skipping CX inventory allocation`,
+        );
+      } else {
+        for (const mat of Object.keys(materials)) {
+          for (const CXMat of Object.keys(state.WAR[data.exchange])) {
+            if (CXMat === mat) {
+              // Amount of material used (minimum of needed and had on hand)
+              const used = Math.min(materials[mat], state.WAR[data.exchange][CXMat]);
+              materials[mat] -= used;
+              state.WAR[data.exchange][CXMat] -= used;
+              if (state.WAR[data.exchange][mat] <= 0) {
+                // Remove material from CX Inv is already allocated
+                delete state.WAR[data.exchange][CXMat];
+              }
             }
           }
-        }
-        if (materials[mat] <= 0) {
-          // Remove material from list if you already have enough on the CX
-          delete materials[mat];
+          if (materials[mat] <= 0) {
+            // Remove material from list if you already have enough on the CX
+            delete materials[mat];
+          }
         }
       }
     }

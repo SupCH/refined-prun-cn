@@ -6,6 +6,7 @@ import TextInput from '@src/components/forms/TextInput.vue';
 import Commands from '@src/components/forms/Commands.vue';
 import SelectInput from '@src/components/forms/SelectInput.vue';
 import { act } from '@src/features/XIT/ACT/act-registry';
+import { t } from '@src/infrastructure/i18n';
 
 const { add, group, onSave } = defineProps<{
   add?: boolean;
@@ -44,17 +45,21 @@ function onSaveClick() {
 
 <template>
   <div :class="C.DraftConditionEditor.form">
-    <SectionHeader>{{ add ? 'Add' : 'Edit' }} Material Group</SectionHeader>
+    <SectionHeader
+      >{{ add ? t('act.add') : t('act.edit') }} {{ t('act.materialGroup') }}</SectionHeader
+    >
     <form>
-      <Active label="Type">
+      <Active :label="t('act.typeLabel')">
         <SelectInput v-model="type" :options="typeOptions" />
       </Active>
-      <Active label="Name" :error="nameError">
+      <Active :label="t('act.name')" :error="nameError">
         <TextInput v-model="name" />
       </Active>
       <Component :is="editFormComponent" v-if="editFormComponent" ref="editForm" :group="group" />
       <Commands>
-        <PrunButton primary @click="onSaveClick">{{ add ? 'ADD' : 'SAVE' }}</PrunButton>
+        <PrunButton primary @click="onSaveClick">{{
+          add ? t('act.add').toUpperCase() : t('act.save').toUpperCase()
+        }}</PrunButton>
       </Commands>
     </form>
   </div>

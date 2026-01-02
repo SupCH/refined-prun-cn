@@ -10,6 +10,8 @@ import ConfigWindow from '@src/features/XIT/ACT/ConfigureWindow.vue';
 import { ActionPackageConfig } from '@src/features/XIT/ACT/shared-types';
 import { act } from '@src/features/XIT/ACT/act-registry';
 
+import { t } from '@src/infrastructure/i18n';
+
 const { pkg } = defineProps<{ pkg: UserData.ActionPackageData }>();
 
 const tile = useTile();
@@ -24,7 +26,7 @@ const log = ref([] as { tag: LogTag; message: string }[]);
 const logScrolling = ref(true);
 const isPreviewing = ref(false);
 const isRunning = ref(false);
-const status = ref(undefined as string | undefined);
+const statusText = ref(undefined as string | undefined);
 const actReady = ref(false);
 
 watch(config, clearLog, { deep: true });
@@ -91,10 +93,10 @@ const runner = new ActionRunner({
   onStart: () => (isRunning.value = true),
   onEnd: () => {
     isRunning.value = false;
-    status.value = undefined;
+    statusText.value = undefined;
   },
   onStatusChanged: (title, keepReady) => {
-    status.value = title;
+    statusText.value = title;
     if (!keepReady) {
       actReady.value = false;
     }
@@ -118,14 +120,25 @@ async function onPreviewClick() {
   isPreviewing.value = true;
   await runner.preview(pkg, config.value);
   isPreviewing.value = false;
-  status.value = undefined;
+  statusText.value = undefined;
 }
 
 function onExecuteClick() {
   logScrolling.value = true;
   clearLog();
   actReady.value = false;
-  runner.execute(pkg, config.value);
+  runner.execute(pkg, config.value, false);
+}
+
+function onAutoExecuteClick() {
+  logScrolling.value = true;
+  clearLog();
+  actReady.value = false;
+  runner.execute(pkg, config.value, true);
+}
+
+function onStopAutoClick() {
+  runner.stopAuto();
 }
 
 function onCancelClick() {
@@ -163,41 +176,55 @@ function clearLog() {
       :class="$style.mainWindow" />
     <LogWindow v-else :messages="log" :scrolling="logScrolling" :class="$style.mainWindow" />
     <div :class="$style.status">
-      <span>Status: </span>
-      <span v-if="status">{{ status }}</span>
-      <span v-else-if="shouldShowConfigure">Configure group parameters ↑</span>
-      <span v-else>Press Execute to start</span>
+      <span>{{ t('act.status') }}: </span>
+      <span v-if="statusText">{{ statusText }}</span>
+      <span v-else-if="shouldShowConfigure">{{ t('act.configureParams') }}</span>
+      <span v-else>{{ t('act.pressExecute') }}</span>
     </div>
     <ActionBar :class="$style.actionBar">
       <template v-if="shouldShowConfigure">
         <PrunButton primary :disabled="!isValidConfig" @click="onConfigureApplyClick">
-          APPLY
+          {{ t('act.apply').toUpperCase() }}
         </PrunButton>
       </template>
       <template v-else-if="isPreviewing">
-        <PrunButton v-if="needsConfigure" primary @click="onConfigureClick">CONFIGURE</PrunButton>
-        <PrunButton disabled>PREVIEW</PrunButton>
-        <PrunButton disabled>EXECUTE</PrunButton>
+        <PrunButton v-if="needsConfigure" primary @click="onConfigureClick">
+          {{ t('act.configure').toUpperCase() }}
+        </PrunButton>
+        <PrunButton disabled>{{ t('act.preview').toUpperCase() }}</PrunButton>
+        <PrunButton disabled>{{ t('act.execute').toUpperCase() }}</PrunButton>
       </template>
       <template v-else-if="!isRunning">
-        <PrunButton v-if="needsConfigure" primary @click="onConfigureClick">CONFIGURE</PrunButton>
-        <PrunButton primary @click="onPreviewClick">PREVIEW</PrunButton>
-        <PrunButton primary :class="$style.executeButton" @click="onExecuteClick">
-          EXECUTE
+        <PrunButton v-if="needsConfigure" primary @click="onConfigureClick">
+          {{ t('act.configure').toUpperCase() }}
+        </PrunButton>
+        <PrunButton primary @click="onPreviewClick">
+          {{ t('act.preview').toUpperCase() }}
+        </PrunButton>
+        <PrunButton primary @click="onExecuteClick">
+          {{ t('act.execute').toUpperCase() }}
+        </PrunButton>
+        <PrunButton primary :class="$style.executeButton" @click="onAutoExecuteClick">
+          {{ t('act.autoExecute').toUpperCase() }}
         </PrunButton>
       </template>
       <template v-else>
-        <PrunButton v-if="needsConfigure" primary disabled>CONFIGURE</PrunButton>
-        <PrunButton primary disabled>PREVIEW</PrunButton>
-        <PrunButton
-          danger
-          :disabled="!actReady"
-          :class="$style.executeButton"
-          @click="onCancelClick">
-          CANCEL
+        <PrunButton v-if="needsConfigure" primary disabled>
+          {{ t('act.configure').toUpperCase() }}
         </PrunButton>
-        <PrunButton primary :disabled="!actReady" @click="onActClick">ACT</PrunButton>
-        <PrunButton neutral :disabled="!actReady" @click="onSkipClick">SKIP</PrunButton>
+        <PrunButton primary disabled>{{ t('act.preview').toUpperCase() }}</PrunButton>
+        <PrunButton danger :class="$style.executeButton" @click="onCancelClick">
+          {{ t('act.cancel').toUpperCase() }}
+        </PrunButton>
+        <PrunButton v-if="runner.isAutoMode" primary @click="onStopAutoClick">
+          {{ t('act.stopAuto').toUpperCase() }}
+        </PrunButton>
+        <PrunButton primary :disabled="!actReady || runner.isAutoMode" @click="onActClick">
+          {{ t('act.act').toUpperCase() }}
+        </PrunButton>
+        <PrunButton neutral :disabled="!actReady || runner.isAutoMode" @click="onSkipClick">
+          {{ t('act.skip').toUpperCase() }}
+        </PrunButton>
       </template>
     </ActionBar>
   </div>

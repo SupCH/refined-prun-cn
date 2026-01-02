@@ -8,6 +8,7 @@ import { comparePlanets } from '@src/util';
 import TextInput from '@src/components/forms/TextInput.vue';
 import RadioItem from '@src/components/forms/RadioItem.vue';
 import { materialsStore } from '@src/infrastructure/prun-api/data/materials';
+import { t } from '@src/infrastructure/i18n';
 import { configurableValue } from '@src/features/XIT/ACT/shared-types';
 
 const { group } = defineProps<{ group: UserData.MaterialGroupData }>();
@@ -59,28 +60,28 @@ defineExpose({ validate, save });
 </script>
 
 <template>
-  <Active label="Planet" :error="planetError">
+  <Active :label="t('act.planet')" :error="planetError">
     <SelectInput v-model="planet" :options="planets" />
   </Active>
   <Active
-    label="Days"
+    :label="t('act.days')"
     tooltip="The number of days of supplies to refill the planet with."
     :error="daysError">
     <NumberInput v-model="days" />
   </Active>
   <Active
-    label="Material Exclusions"
+    :label="t('act.materialExclusions')"
     tooltip="Materials to be excluded from the group. List material tickers separated by commas.">
     <TextInput v-model="exclusions" />
   </Active>
   <Active
-    label="Use Base Inv"
+    :label="t('act.useBaseInv')"
     tooltip="Whether to count the materials currently in the base towards the totals.">
-    <RadioItem v-model="useBaseInventory">use base inv</RadioItem>
+    <RadioItem v-model="useBaseInventory">{{ t('act.useBaseInv').toLowerCase() }}</RadioItem>
   </Active>
   <Active
-    label="Workforce Only"
+    :label="t('act.workforceOnly')"
     tooltip="Whether to limit the materials in the group to workforce consumables only.">
-    <RadioItem v-model="workforceOnly">workforce only</RadioItem>
+    <RadioItem v-model="workforceOnly">{{ t('act.workforceOnly').toLowerCase() }}</RadioItem>
   </Active>
 </template>

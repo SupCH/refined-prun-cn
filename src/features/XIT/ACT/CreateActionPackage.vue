@@ -6,6 +6,8 @@ import TextInput from '@src/components/forms/TextInput.vue';
 import Commands from '@src/components/forms/Commands.vue';
 import { isValidPackageName } from '@src/features/XIT/ACT/utils';
 
+import { t } from '@src/infrastructure/i18n';
+
 const { onCreate } = defineProps<{ onCreate: (name: string) => void }>();
 
 const emit = defineEmits<{ (e: 'close'): void }>();
@@ -26,13 +28,13 @@ function onCreateClick() {
 
 <template>
   <div :class="C.DraftConditionEditor.form">
-    <SectionHeader>Create Action Package</SectionHeader>
+    <SectionHeader>{{ t('act.createPackage') }}</SectionHeader>
     <form>
-      <Active label="Name" :error="nameError">
+      <Active :label="t('act.name')" :error="nameError">
         <TextInput v-model="name" />
       </Active>
       <Commands>
-        <PrunButton primary @click="onCreateClick">CREATE</PrunButton>
+        <PrunButton primary @click="onCreateClick">{{ t('act.add').toUpperCase() }}</PrunButton>
       </Commands>
     </form>
   </div>

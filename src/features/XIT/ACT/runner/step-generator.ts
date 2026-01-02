@@ -4,6 +4,7 @@ import { warehousesStore } from '@src/infrastructure/prun-api/data/warehouses';
 import { exchangesStore } from '@src/infrastructure/prun-api/data/exchanges';
 import { storagesStore } from '@src/infrastructure/prun-api/data/storage';
 import { act } from '@src/features/XIT/ACT/act-registry';
+import { t } from '@src/infrastructure/i18n';
 
 interface StepGeneratorOptions {
   log: Logger;
@@ -64,9 +65,8 @@ export class StepGenerator {
         break;
       }
     }
-    if (steps.length === 0) {
-      this.log.error('No actions were generated');
-      fail = true;
+    if (steps.length === 0 && !fail) {
+      this.log.info(t('act.noActionsGenerated'));
     }
     return { steps, fail };
   }

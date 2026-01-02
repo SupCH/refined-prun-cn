@@ -7,6 +7,8 @@ import Commands from '@src/components/forms/Commands.vue';
 import SelectInput from '@src/components/forms/SelectInput.vue';
 import { act } from '@src/features/XIT/ACT/act-registry';
 
+import { t } from '@src/infrastructure/i18n';
+
 const { add, action, onSave, pkg } = defineProps<{
   add?: boolean;
   action: UserData.ActionData;
@@ -45,12 +47,12 @@ function onSaveClick() {
 
 <template>
   <div :class="C.DraftConditionEditor.form">
-    <SectionHeader>{{ add ? 'Add' : 'Edit' }} Action</SectionHeader>
+    <SectionHeader>{{ add ? t('act.addAction') : t('act.editAction') }}</SectionHeader>
     <form>
-      <Active label="Type">
+      <Active :label="t('act.typeLabel')">
         <SelectInput v-model="type" :options="typeOptions" />
       </Active>
-      <Active label="Name" :error="nameError">
+      <Active :label="t('act.name')" :error="nameError">
         <TextInput v-model="name" />
       </Active>
       <Component
@@ -60,7 +62,9 @@ function onSaveClick() {
         :action="action"
         :pkg="pkg" />
       <Commands>
-        <PrunButton primary @click="onSaveClick">{{ add ? 'ADD' : 'SAVE' }}</PrunButton>
+        <PrunButton primary @click="onSaveClick">{{
+          add ? t('act.add').toUpperCase() : t('act.save').toUpperCase()
+        }}</PrunButton>
       </Commands>
     </form>
   </div>

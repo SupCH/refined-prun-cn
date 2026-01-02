@@ -5,6 +5,8 @@ import { storagesStore } from '@src/infrastructure/prun-api/data/storage';
 import { serializeStorage, storageSort } from '@src/features/XIT/ACT/actions/utils';
 import { configurableValue } from '@src/features/XIT/ACT/shared-types';
 
+import { t } from '@src/infrastructure/i18n';
+
 const { action, pkg } = defineProps<{
   action: UserData.ActionData;
   pkg: UserData.ActionPackageData;
@@ -39,13 +41,13 @@ defineExpose({ validate, save });
 </script>
 
 <template>
-  <Active label="Material Group">
+  <Active :label="t('act.materialGroup')">
     <SelectInput v-model="materialGroup" :options="materialGroups" />
   </Active>
-  <Active label="Origin">
+  <Active :label="t('act.origin')">
     <SelectInput v-model="origin" :options="storages" />
   </Active>
-  <Active label="Destination">
+  <Active :label="t('act.destination')">
     <SelectInput v-model="destination" :options="storages" />
   </Active>
 </template>

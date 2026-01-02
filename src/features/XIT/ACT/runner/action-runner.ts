@@ -5,6 +5,7 @@ import { TileAllocator } from '@src/features/XIT/ACT/runner/tile-allocator';
 import { StepMachine } from '@src/features/XIT/ACT/runner/step-machine';
 import { StepGenerator } from '@src/features/XIT/ACT/runner/step-generator';
 import { ActionPackageConfig } from '@src/features/XIT/ACT/shared-types';
+import { t } from '@src/infrastructure/i18n';
 
 interface ActionRunnerOptions {
   tile: PrunTile;
@@ -20,6 +21,7 @@ export class ActionRunner {
   private readonly tileAllocator: TileAllocator;
   private readonly stepGenerator: StepGenerator;
   private stepMachine?: StepMachine;
+  private autoMode = false; // Track auto-execute mode
 
   constructor(private options: ActionRunnerOptions) {
     this.tileAllocator = new TileAllocator(options);
@@ -32,6 +34,10 @@ export class ActionRunner {
 
   get isRunning() {
     return this.stepMachine?.isRunning ?? false;
+  }
+
+  get isAutoMode() {
+    return this.autoMode;
   }
 
   async preview(pkg: UserData.ActionPackageData, config: ActionPackageConfig) {
@@ -54,7 +60,7 @@ export class ActionRunner {
     }
   }
 
-  async execute(pkg: UserData.ActionPackageData, config: ActionPackageConfig) {
+  async execute(pkg: UserData.ActionPackageData, config: ActionPackageConfig, auto = false) {
     if (this.isRunning) {
       this.log.error('Action Package is already running');
       return;
@@ -66,10 +72,25 @@ export class ActionRunner {
       this.log.error('Action Package execution failed');
       return;
     }
-    this.log.info('Action Package execution started');
+
+    this.autoMode = auto;
+    this.log.info(auto ? t('act.autoExecutionStarted') : t('act.executionStarted'));
+
     this.stepMachine = new StepMachine(steps, {
       ...this.options,
       tileAllocator: this.tileAllocator,
+      // Override onActReady to support auto-execution
+      onActReady: () => {
+        this.options.onActReady();
+        // Automatically call act() if in auto mode
+        if (this.autoMode && this.stepMachine?.isRunning) {
+          setTimeout(() => {
+            if (this.autoMode && this.stepMachine?.isRunning) {
+              this.act();
+            }
+          }, 500); // 500ms delay to let user see the step
+        }
+      },
     });
     this.stepMachine.start();
   }
@@ -78,6 +99,7 @@ export class ActionRunner {
     this.stepMachine?.act();
     if (!this.stepMachine?.isRunning) {
       this.stepMachine = undefined;
+      this.autoMode = false;
     }
   }
 
@@ -85,11 +107,18 @@ export class ActionRunner {
     this.stepMachine?.skip();
     if (!this.stepMachine?.isRunning) {
       this.stepMachine = undefined;
+      this.autoMode = false;
     }
   }
 
   cancel() {
     this.stepMachine?.cancel();
     this.stepMachine = undefined;
+    this.autoMode = false;
+  }
+
+  stopAuto() {
+    this.autoMode = false;
+    this.options.log.info('Auto-execution stopped, switched to manual mode');
   }
 }

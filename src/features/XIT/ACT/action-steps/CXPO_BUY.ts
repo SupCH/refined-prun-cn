@@ -1,4 +1,5 @@
 import { act } from '@src/features/XIT/ACT/act-registry';
+import { t } from '@src/infrastructure/i18n';
 import { fixed0, fixed02 } from '@src/utils/format';
 import { changeInputValue, clickElement } from '@src/util';
 import { fillAmount } from '@src/features/XIT/ACT/actions/cx-buy/utils';
@@ -32,22 +33,22 @@ export const CXPO_BUY = act.addActionStep<Data>({
     const willFillCompletely = filled && filled.amount === data.amount;
 
     if (!willFillCompletely && allowUnfilled) {
-      let description = `Bid for ${fixed0(data.amount)} ${ticker} on ${exchange}`;
+      let description = t('act.bidDescription', fixed0(data.amount), ticker, exchange);
       if (isFinite(priceLimit)) {
-        description += ` at price ${fixed02(data.priceLimit)}`;
-        description += ` (${fixed0(data.amount * data.priceLimit)} total cost)`;
+        description += ' ' + t('act.atPrice', fixed02(data.priceLimit));
+        description += ' (' + t('act.totalCost', fixed0(data.amount * data.priceLimit)) + ')';
       }
       return description;
     }
 
-    let description = `Buy ${fixed0(amount)} ${ticker} on ${exchange}`;
+    let description = t('act.buyDescription', fixed0(amount), ticker, exchange);
     if (isFinite(priceLimit)) {
-      description += ` with price limit ${fixed02(priceLimit)}`;
+      description += ' ' + t('act.buyWithLimit', fixed02(priceLimit));
     }
     if (filled) {
-      description += ` (${fixed0(filled.cost)} total cost)`;
+      description += ' (' + t('act.totalCost', fixed0(filled.cost)) + ')';
     } else {
-      description += ' (no price data yet)';
+      description += ' (' + t('act.noPriceData') + ')';
     }
     return description;
   },
@@ -58,11 +59,15 @@ export const CXPO_BUY = act.addActionStep<Data>({
     const { amount, ticker, exchange, priceLimit } = data;
     const cxTicker = `${ticker}.${exchange}`;
     const cxWarehouse = computed(() => {
-      const naturalId = exchangesStore.getNaturalIdFromCode(exchange);
-      const warehouse = warehousesStore.getByEntityNaturalId(naturalId);
+      // Use exchange code directly to find warehouse (e.g. 'IC1')
+      const warehouse = warehousesStore.getByEntityNaturalIdOrName(exchange);
       return storagesStore.getById(warehouse?.storeId);
     });
-    assert(cxWarehouse.value, `CX warehouse not found for ${exchange}`);
+
+    // If warehouse data is not loaded (player hasn't visited exchange), skip capacity check
+    if (!cxWarehouse.value) {
+      log.warning(t('act.warehouseNotLoaded', exchange));
+    }
 
     if (amount <= 0) {
       log.warning(`No ${ticker} was bought (target amount is 0)`);
@@ -73,14 +78,17 @@ export const CXPO_BUY = act.addActionStep<Data>({
     const material = materialsStore.getByTicker(ticker);
     assert(material, `Unknown material ${ticker}`);
 
-    const canFitWeight =
-      material.weight * amount <= cxWarehouse.value.weightCapacity - cxWarehouse.value.weightLoad;
-    const canFitVolume =
-      material.volume * amount <= cxWarehouse.value.volumeCapacity - cxWarehouse.value.volumeLoad;
-    assert(
-      canFitWeight && canFitVolume,
-      `Cannot not buy ${fixed0(amount)} ${ticker} (will not fit in the warehouse)`,
-    );
+    // Only check capacity if warehouse data is available
+    if (cxWarehouse.value) {
+      const canFitWeight =
+        material.weight * amount <= cxWarehouse.value.weightCapacity - cxWarehouse.value.weightLoad;
+      const canFitVolume =
+        material.volume * amount <= cxWarehouse.value.volumeCapacity - cxWarehouse.value.volumeLoad;
+      assert(
+        canFitWeight && canFitVolume,
+        `Cannot not buy ${fixed0(amount)} ${ticker} (will not fit in the warehouse)`,
+      );
+    }
 
     const tile = await requestTile(`CXPO ${cxTicker}`);
     if (!tile) {
@@ -170,9 +178,11 @@ export const CXPO_BUY = act.addActionStep<Data>({
     await clickElement(buyButton);
     await waitActionFeedback(tile);
 
-    if (shouldWaitForUpdate) {
+    if (shouldWaitForUpdate && cxWarehouse.value) {
       setStatus('Waiting for storage update...');
-      await watchWhile(() => warehouseAmount.value === currentAmount);
+      const storageUpdatePromise = watchWhile(() => warehouseAmount.value === currentAmount);
+      const timeoutPromise = new Promise(resolve => setTimeout(resolve, 5000));
+      await Promise.race([storageUpdatePromise, timeoutPromise]);
     } else {
       setStatus('Bid order created');
     }

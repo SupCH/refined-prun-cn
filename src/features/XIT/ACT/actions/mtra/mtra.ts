@@ -5,6 +5,7 @@ import { MTRA_TRANSFER } from '@src/features/XIT/ACT/action-steps/MTRA_TRANSFER'
 import { atSameLocation, deserializeStorage } from '@src/features/XIT/ACT/actions/utils';
 import { Config } from '@src/features/XIT/ACT/actions/mtra/config';
 import { AssertFn, configurableValue } from '@src/features/XIT/ACT/shared-types';
+import { t } from '@src/infrastructure/i18n';
 
 act.addAction<Config>({
   type: 'MTRA',
@@ -15,13 +16,13 @@ act.addAction<Config>({
 
     const origin =
       action.origin == configurableValue
-        ? (config?.origin ?? 'configured location')
+        ? (config?.origin ?? t('act.configuredLocation'))
         : action.origin;
     const dest =
       action.dest == configurableValue
-        ? (config?.destination ?? 'configured location')
+        ? (config?.destination ?? t('act.configuredLocation'))
         : action.dest;
-    return `Transfer group [${action.group}] from ${origin} to ${dest}`;
+    return t('act.transferGroup', action.group, origin, dest);
   },
   editComponent: Edit,
   configureComponent: Configure,

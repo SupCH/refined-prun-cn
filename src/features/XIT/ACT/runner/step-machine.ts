@@ -4,6 +4,7 @@ import { Logger } from '@src/features/XIT/ACT/runner/logger';
 import { TileAllocator } from '@src/features/XIT/ACT/runner/tile-allocator';
 import { clickElement } from '@src/util';
 import { sleep } from '@src/utils/sleep';
+import { t } from '@src/infrastructure/i18n';
 
 interface StepMachineOptions {
   tile: PrunTile;
@@ -67,7 +68,7 @@ export class StepMachine {
     if (!this.ensureRunning()) {
       return;
     }
-    this.log.cancel('Action Package execution canceled');
+    this.log.cancel(t('act.cancelExecution'));
     this.stop();
   }
 
@@ -79,7 +80,7 @@ export class StepMachine {
 
   private startNext() {
     if (this.steps.length === 0) {
-      this.log.success('Action Package execution completed');
+      this.log.success(t('act.executionCompleted'));
       this.stop();
       return;
     }

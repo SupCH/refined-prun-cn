@@ -5,6 +5,7 @@ import Active from '@src/components/forms/Active.vue';
 import TextInput from '@src/components/forms/TextInput.vue';
 import Commands from '@src/components/forms/Commands.vue';
 import { isValidPackageName } from '@src/features/XIT/ACT/utils';
+import { t } from '@src/infrastructure/i18n';
 
 const { name, onRename } = defineProps<{ name: string; onRename: (name: string) => void }>();
 
@@ -26,17 +27,16 @@ function onCreateClick() {
 
 <template>
   <div :class="C.DraftConditionEditor.form">
-    <SectionHeader>Rename Action Package</SectionHeader>
+    <SectionHeader>{{ t('act.renamePackage') }}</SectionHeader>
     <div :class="$style.description">
-      WARNING: Renaming an action package will break all existing tile links to it (including this
-      one). You can see the full list of your action packages in XIT ACT.
+      {{ t('act.renameWarning') }}
     </div>
     <form>
-      <Active label="Name" :error="nameError">
+      <Active :label="t('act.name')" :error="nameError">
         <TextInput v-model="newName" />
       </Active>
       <Commands>
-        <PrunButton primary @click="onCreateClick">RENAME</PrunButton>
+        <PrunButton primary @click="onCreateClick">{{ t('act.rename').toUpperCase() }}</PrunButton>
       </Commands>
     </form>
   </div>
