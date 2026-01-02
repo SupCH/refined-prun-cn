@@ -1,16 +1,12 @@
 import { storagesStore } from './storage.js';
 import { userData } from './user-data.js';
-import dayjs from './dayjs.min.js';
+import './dayjs.min.js';
 function getShipStorages() {
   const allStorages = storagesStore.all.value ?? [];
   return allStorages.filter(x => x.type === 'SHIP_STORE' && x.name !== null && x.name !== void 0);
 }
 function serializeShipStorage(storage) {
   return `${storage.name} (${storage.addressableId})`;
-}
-function generatePackageName(prefix) {
-  const timestamp = dayjs().format('YYYY-MM-DD_HHmm');
-  return `${prefix.replace(/\s+/g, '_')}_${timestamp}`;
 }
 function createQuickPurchasePackage(name, materials, exchange, shipStorage) {
   const materialGroup = {
@@ -49,7 +45,6 @@ function addAndNavigateToPackage(pkg) {
 export {
   addAndNavigateToPackage,
   createQuickPurchasePackage,
-  generatePackageName,
   getShipStorages,
   serializeShipStorage,
 };

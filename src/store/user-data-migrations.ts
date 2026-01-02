@@ -8,14 +8,18 @@ const migrations: Migration[] = [
   [
     '02.01.2026 Fix action package names',
     userData => {
-      // Migrate old package names with spaces to underscore format
+      // Migrate old package names: remove colons and handle underscores/spaces consistently
       if (userData.actionPackages && Array.isArray(userData.actionPackages)) {
         let migrated = 0;
         for (const pkg of userData.actionPackages) {
-          if (pkg.global?.name && pkg.global.name.includes(' ')) {
+          if (
+            pkg.global?.name &&
+            (pkg.global.name.includes(':') ||
+              (pkg.global.name.includes('_') && !pkg.global.name.includes(' ')))
+          ) {
             const oldName = pkg.global.name;
-            // Replace spaces with underscores and remove colons
-            pkg.global.name = oldName.replace(/\s+/g, '_').replace(/:/g, '');
+            // Remove colons and convert underscores to spaces for standard storage format
+            pkg.global.name = oldName.replace(/:/g, '').replace(/_/g, ' ');
             migrated++;
             console.log(`[Migration] Fixed package name: "${oldName}" -> "${pkg.global.name}"`);
           }

@@ -18,7 +18,13 @@ if (run) {
   pkgName = parameters.slice(1).join(' ');
 }
 
-const pkg = computed(() => userData.actionPackages.find(x => x.global.name === pkgName));
+const pkg = computed(() => {
+  if (!pkgName) return undefined;
+  return (
+    userData.actionPackages.find(x => x.global.name === pkgName) ||
+    userData.actionPackages.find(x => x.global.name === pkgName.split(' ').join('_'))
+  );
+});
 </script>
 
 <template>

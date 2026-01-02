@@ -24,8 +24,8 @@ export function serializeShipStorage(storage: PrunApi.Store): string {
  * Package names use underscores instead of spaces to avoid command parsing issues
  */
 export function generatePackageName(prefix: string): string {
-  const timestamp = dayjs().format('YYYY-MM-DD_HHmm');
-  return `${prefix.replace(/\s+/g, '_')}_${timestamp}`;
+  const timestamp = dayjs().format('YYYY-MM-DD HHmm');
+  return `${prefix} ${timestamp}`;
 }
 
 /**

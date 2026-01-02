@@ -1,4 +1,4 @@
-import _sfc_main$1 from './ContractLink.vue.js';
+import _sfc_main$1 from './ContractLink.vue2.js';
 import _sfc_main$2 from './MaterialList.vue.js';
 import PartnerLink from './PartnerLink.vue.js';
 import _sfc_main$3 from './ConditionList.vue.js';

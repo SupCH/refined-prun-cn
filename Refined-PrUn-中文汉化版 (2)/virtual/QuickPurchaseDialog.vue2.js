@@ -1,5 +1,4 @@
 import { withModifiers } from './runtime-dom.esm-bundler.js';
-import { t } from './index13.js';
 import _sfc_main$2 from './Active.vue.js';
 import SelectInput from './SelectInput.vue.js';
 import _sfc_main$1 from './NumberInput.vue.js';
@@ -8,15 +7,17 @@ import { userData } from './user-data.js';
 import {
   getShipStorages,
   serializeShipStorage,
-  generatePackageName,
   createQuickPurchasePackage,
   addAndNavigateToPackage,
 } from './quick-purchase-utils.js';
 import { materialsStore } from './materials.js';
 import { fixed0 } from './format.js';
 import { showBuffer } from './buffers.js';
+import dayjs from './dayjs.min.js';
+import { t } from './index13.js';
 import {
   defineComponent,
+  onMounted,
   computed,
   createElementBlock,
   openBlock,
@@ -38,19 +39,38 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: 'QuickPurchaseDialog',
   props: {
     materials: {},
-    rawBurnData: {},
     packageNamePrefix: {},
+    rawBurnData: {},
   },
   emits: ['close'],
   setup(__props, { emit: __emit }) {
     const props = __props;
     const emit = __emit;
     const exchanges = ['AI1', 'CI1', 'IC1', 'NC1', 'CI2', 'NC2'];
-    const selectedExchange = ref('IC1');
+    const selectedExchange = ref('UNIVERSE');
+    const selectedShip = ref(void 0);
+    const shipStorages = ref([]);
+    const selectedSites = ref([]);
     const resupplyDays = ref(userData.settings.burn.resupply);
-    const selectedSites = ref(
-      props.rawBurnData?.map(s => s.naturalId).filter(id => id !== '') ?? [],
-    );
+    const consumableCategories = [
+      'food and luxury consumables',
+      'consumables (basic)',
+      'medical supplies',
+      'ship parts',
+      'ship engines',
+      'ship shields',
+    ];
+    onMounted(async () => {
+      shipStorages.value = await getShipStorages();
+      if (shipStorages.value.length > 0) {
+        selectedShip.value = shipStorages.value[0].addressableId;
+      }
+      if (props.rawBurnData) {
+        selectedSites.value = props.rawBurnData
+          .filter(burn => burn.naturalId !== '')
+          .map(burn => burn.naturalId);
+      }
+    });
     const computedMaterials = computed(() => {
       if (props.rawBurnData) {
         const materials = {};
@@ -71,34 +91,24 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
       return props.materials || {};
     });
-    const shipStorages = computed(() => getShipStorages());
     const shipOptions = computed(() =>
       shipStorages.value.map(ship => ({
         value: ship.addressableId,
         label: serializeShipStorage(ship),
       })),
     );
-    const selectedShip = ref(shipOptions.value[0]?.value ?? '');
-    const consumableCategories = [
-      'food and luxury consumables',
-      'consumables (basic)',
-      'medical supplies',
-      'ship parts',
-      'ship engines',
-      'ship shields',
-    ];
     const materialList = computed(() => {
       const allMaterials = Object.entries(computedMaterials.value)
+        .sort((a, b) => a[0].localeCompare(b[0]))
         .map(([ticker, amount]) => {
           const material = materialsStore.getByTicker(ticker);
           return {
             ticker,
-            name: material?.name ?? ticker,
-            amount: Math.ceil(amount),
-            category: material?.category ?? 'unknown',
+            name: material?.name || ticker,
+            amount,
+            category: material?.category || '',
           };
-        })
-        .sort((a, b) => a.ticker.localeCompare(b.ticker));
+        });
       const consumables = allMaterials.filter(m =>
         consumableCategories.some(cat => m.category.toLowerCase().includes(cat)),
       );
@@ -123,7 +133,9 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       if (!shipStorage) {
         return;
       }
-      const packageName = generatePackageName(props.packageNamePrefix);
+      const timestamp = dayjs().format('YYYY-MM-DD_HHmm');
+      const safePrefix = props.packageNamePrefix.replace(/[^a-zA-Z0-9]/g, '_');
+      const packageName = `${safePrefix}_${timestamp}`;
       const pkg = createQuickPurchasePackage(
         packageName,
         computedMaterials.value,
@@ -143,12 +155,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             class: normalizeClass(_ctx.$style.container),
           },
           [
-            createBaseVNode(
-              'h2',
-              null,
-              toDisplayString(('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.title')),
-              1,
-            ),
+            createBaseVNode('h2', null, toDisplayString(unref(t)('quickPurchase.title')), 1),
             _ctx.rawBurnData && _ctx.rawBurnData.length > 0
               ? (openBlock(),
                 createElementBlock(
@@ -167,7 +174,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         createVNode(
                           _sfc_main$2,
                           {
-                            label: ('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.resupplyDays'),
+                            label: unref(t)('quickPurchase.resupplyDays'),
                           },
                           {
                             default: withCtx(() => [
@@ -196,9 +203,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     createBaseVNode(
                       'h3',
                       null,
-                      toDisplayString(
-                        ('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.selectSites'),
-                      ),
+                      toDisplayString(unref(t)('quickPurchase.selectSites')),
                       1,
                     ),
                     createBaseVNode(
@@ -271,7 +276,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                 createBaseVNode(
                   'h3',
                   null,
-                  toDisplayString(('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.materialList')),
+                  toDisplayString(unref(t)('quickPurchase.materialList')),
                   1,
                 ),
                 unref(materialList).consumables.length > 0
@@ -282,9 +287,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         {
                           class: normalizeClass(_ctx.$style.categoryTitle),
                         },
-                        toDisplayString(
-                          ('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.consumables'),
-                        ),
+                        toDisplayString(unref(t)('quickPurchase.consumables')),
                         3,
                       ),
                       createBaseVNode(
@@ -304,17 +307,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                   createBaseVNode(
                                     'th',
                                     null,
-                                    toDisplayString(
-                                      ('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.material'),
-                                    ),
+                                    toDisplayString(unref(t)('quickPurchase.material')),
                                     1,
                                   ),
                                   createBaseVNode(
                                     'th',
                                     null,
-                                    toDisplayString(
-                                      ('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.amount'),
-                                    ),
+                                    toDisplayString(unref(t)('quickPurchase.amount')),
                                     1,
                                   ),
                                 ]),
@@ -374,9 +373,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           {
                             class: normalizeClass(_ctx.$style.categoryTitle),
                           },
-                          toDisplayString(
-                            ('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.rawMaterials'),
-                          ),
+                          toDisplayString(unref(t)('quickPurchase.rawMaterials')),
                           3,
                         ),
                         createBaseVNode(
@@ -396,17 +393,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                     createBaseVNode(
                                       'th',
                                       null,
-                                      toDisplayString(
-                                        ('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.material'),
-                                      ),
+                                      toDisplayString(unref(t)('quickPurchase.material')),
                                       1,
                                     ),
                                     createBaseVNode(
                                       'th',
                                       null,
-                                      toDisplayString(
-                                        ('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.amount'),
-                                      ),
+                                      toDisplayString(unref(t)('quickPurchase.amount')),
                                       1,
                                     ),
                                   ]),
@@ -462,9 +455,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         key: 2,
                         class: normalizeClass(_ctx.$style.empty),
                       },
-                      toDisplayString(
-                        ('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.noMaterials'),
-                      ),
+                      toDisplayString(unref(t)('quickPurchase.noMaterials')),
                       3,
                     ))
                   : createCommentVNode('', true),
@@ -480,7 +471,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                 createVNode(
                   _sfc_main$2,
                   {
-                    label: ('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.selectExchange'),
+                    label: unref(t)('quickPurchase.selectExchange'),
                   },
                   {
                     default: withCtx(() => [
@@ -507,7 +498,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                 createVNode(
                   _sfc_main$2,
                   {
-                    label: ('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.selectShip'),
+                    label: unref(t)('quickPurchase.selectShip'),
                   },
                   {
                     default: withCtx(() => [
@@ -535,9 +526,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               key: 1,
                               class: normalizeClass(_ctx.$style.error),
                             },
-                            toDisplayString(
-                              ('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.noShips'),
-                            ),
+                            toDisplayString(unref(t)('quickPurchase.noShips')),
                             3,
                           )),
                     ]),
@@ -564,10 +553,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   },
                   {
                     default: withCtx(() => [
-                      createTextVNode(
-                        toDisplayString(('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.confirm')),
-                        1,
-                      ),
+                      createTextVNode(toDisplayString(unref(t)('quickPurchase.confirm')), 1),
                     ]),
                     _: 1,
                   },
@@ -581,10 +567,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   },
                   {
                     default: withCtx(() => [
-                      createTextVNode(
-                        toDisplayString(('t' in _ctx ? _ctx.t : unref(t))('quickPurchase.cancel')),
-                        1,
-                      ),
+                      createTextVNode(toDisplayString(unref(t)('quickPurchase.cancel')), 1),
                     ]),
                     _: 1,
                   },

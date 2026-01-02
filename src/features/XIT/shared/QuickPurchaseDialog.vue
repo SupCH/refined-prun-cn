@@ -125,10 +125,9 @@ function onConfirm() {
     return;
   }
 
-  // Ensure package name is strictly sanitized locally to bypass any potential module caching issues
-  const timestamp = dayjs().format('YYYY-MM-DD_HHmm');
-  const safePrefix = props.packageNamePrefix.replace(/[^a-zA-Z0-9]/g, '_');
-  const packageName = `${safePrefix}_${timestamp}`;
+  // Use space-based name for storage (project convention), but NO colons or special chars
+  const timestamp = dayjs().format('YYYY-MM-DD HHmm');
+  const packageName = `${props.packageNamePrefix} ${timestamp}`;
   const pkg = createQuickPurchasePackage(
     packageName,
     computedMaterials.value,
@@ -137,8 +136,8 @@ function onConfirm() {
   );
 
   const pkgName = addAndNavigateToPackage(pkg);
-  // Package name is already sanitized (no spaces or special chars)
-  showBuffer(`XIT ACT_EDIT_${pkgName}`);
+  // Navigation command MUST use underscores instead of spaces
+  showBuffer(`XIT ACT_EDIT_${pkgName.split(' ').join('_')}`);
   emit('close');
 }
 </script>

@@ -1,4 +1,4 @@
-import _sfc_main$1 from './ContractLink.vue2.js';
+import _sfc_main$1 from './ContractLink.vue.js';
 import { timestampEachSecond } from './dayjs.js';
 import dayjs from './dayjs.min.js';
 import _sfc_main$2 from './ConditionText.vue.js';
