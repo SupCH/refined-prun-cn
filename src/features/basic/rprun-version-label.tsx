@@ -4,7 +4,7 @@ async function onFooterReady(footer: HTMLElement) {
   const userCount = await $(footer, C.UsersOnlineCount.container);
 
   function onClick() {
-    window.open('https://github.com/refined-prun/refined-prun/blob/main/CHANGELOG.md', '_blank');
+    window.open('https://github.com/SupCH/refined-prun-cn/blob/main/CHANGELOG.md', '_blank');
   }
 
   createFragmentApp(() => (

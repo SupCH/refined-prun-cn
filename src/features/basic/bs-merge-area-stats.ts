@@ -32,8 +32,4 @@ function init() {
   tiles.observe('BS', onTileReady);
 }
 
-features.add(
-  import.meta.url,
-  init,
-  'BS: Merges the area progress bar field with the detailed area stats row.',
-);
+features.add(import.meta.url, init, 'BS: 合并区域进度条与详细区域统计行。');
