@@ -153,6 +153,17 @@ function init() {
       handleShipDeparture(data);
     },
   });
+
+  // 扩展加载时检查并请求通知权限
+  if ('Notification' in window && Notification.permission === 'default') {
+    console.log('[Ship Departure] Requesting notification permission on init...');
+    // 延迟 2 秒后请求权限，避免在页面刚加载时弹出
+    setTimeout(() => {
+      Notification.requestPermission().then(permission => {
+        console.log('[Ship Departure] Initial permission request result:', permission);
+      });
+    }, 2000);
+  }
 }
 
 features.add(

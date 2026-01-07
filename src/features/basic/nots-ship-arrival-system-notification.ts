@@ -110,6 +110,17 @@ function createNotification(registration: string, destination: string) {
 function init() {
   console.log('[Ship Notification] Initializing ship arrival notification feature');
   tiles.observe('NOTS', onTileReady);
+
+  // 扩展加载时检查并请求通知权限
+  if ('Notification' in window && Notification.permission === 'default') {
+    console.log('[Ship Notification] Requesting notification permission on init...');
+    // 延迟 2 秒后请求权限，避免在页面刚加载时弹出
+    setTimeout(() => {
+      Notification.requestPermission().then(permission => {
+        console.log('[Ship Notification] Initial permission request result:', permission);
+      });
+    }, 2000);
+  }
 }
 
 features.add(
