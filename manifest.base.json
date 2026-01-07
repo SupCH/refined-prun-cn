@@ -19,9 +19,7 @@
         }
     },
     "permissions": [
-        "storage",
-        "webRequest",
-        "notifications"
+        "storage"
     ],
     "host_permissions": [
         "https://apex.prosperousuniverse.com/*"
@@ -56,7 +54,8 @@
                 "virtual/*",
                 "json/*",
                 "json/fallback-fio-responses/*",
-                "assets/*"
+                "assets/*",
+                "icons/*"
             ],
             "matches": [
                 "https://apex.prosperousuniverse.com/*"

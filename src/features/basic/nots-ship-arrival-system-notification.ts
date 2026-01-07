@@ -1,37 +1,18 @@
-import { getPrunId } from '@src/infrastructure/prun-ui/attributes';
 import { alertsStore } from '@src/infrastructure/prun-api/data/alerts';
 import { getEntityNameFromAddress } from '@src/infrastructure/prun-api/data/addresses';
 
 // 存储已经通知过的船只到达事件，避免重复通知
 const notifiedFlights = new Set<string>();
 
-function onTileReady(tile: PrunTile) {
-  console.log('[Ship Notification] NOTS tile ready, subscribing to notifications');
-  subscribe($$(tile.anchor, C.AlertListItem.container), processNotification);
-}
-
-async function processNotification(container: HTMLElement) {
-  const id = getPrunId(container);
-  const alert = alertsStore.getById(id);
-
-  console.log('[Ship Notification] Processing notification:', {
-    id,
-    alertType: alert?.type,
-    hasAlert: !!alert,
-  });
-
-  if (alert?.type !== 'SHIP_FLIGHT_ENDED') {
-    return;
-  }
-
-  console.log('[Ship Notification] Ship arrival detected!', { id, alert });
-
+function handleShipArrival(alert: PrunApi.Alert) {
   // 避免重复通知
-  if (notifiedFlights.has(id)) {
+  if (notifiedFlights.has(alert.id)) {
     console.log('[Ship Notification] Already notified for this flight, skipping');
     return;
   }
-  notifiedFlights.add(id);
+  notifiedFlights.add(alert.id);
+
+  console.log('[Ship Notification] Ship arrival detected!', { id: alert.id, alert });
 
   // 提取船只注册号
   const registration = alert.data.find(x => x.key === 'registration')?.value as string;
@@ -105,7 +86,21 @@ function createNotification(registration: string, destination: string) {
 
 function init() {
   console.log('[Ship Notification] Initializing ship arrival notification feature');
-  tiles.observe('NOTS', onTileReady);
+
+  // 监听所有新增的警报
+  watchEffect(() => {
+    const alerts = alertsStore.all.value;
+    if (!alerts) {
+      return;
+    }
+    console.log('[Ship Notification] Alerts updated, count:', alerts.length);
+
+    for (const alert of alerts) {
+      if (alert.type === 'SHIP_FLIGHT_ENDED') {
+        handleShipArrival(alert);
+      }
+    }
+  });
 
   // 扩展加载时检查并请求通知权限
   if ('Notification' in window && Notification.permission === 'default') {
@@ -119,8 +114,4 @@ function init() {
   }
 }
 
-features.add(
-  import.meta.url,
-  init,
-  'NOTS: Sends system notification when ship arrives at destination.',
-);
+features.add(import.meta.url, init, 'Sends system notification when ship arrives at destination.');

@@ -27,7 +27,10 @@ function sortScreenList(list: HTMLElement) {
   for (const screen of screens) {
     list.appendChild(screen.el);
   }
-  list.appendChild(_$(list, C.ScreenControls.undo)!);
+  const undo = _$(list, C.ScreenControls.undo);
+  if (undo) {
+    list.appendChild(undo);
+  }
 }
 
 async function onScreenItemReady(item: HTMLElement) {

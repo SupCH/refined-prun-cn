@@ -58,26 +58,25 @@ All data is stored locally in the user's browser and is never uploaded to any se
 
 ---
 
-### 5. webRequest 权限使用理由（webRequest Permission Justification）
-**中文版本：**
-本扩展使用 `webRequest` 权限来监听游戏 API 请求，以便：
-- 实时捕获财务数据并生成资产负债表（XIT FINBS）
-- 追踪物资消耗并计算剩余天数（XIT BURN）
-- 优化数据加载流程，提升响应速度
+## 数据获取方式说明
 
-扩展仅监听游戏官方 API 请求，不会干扰或拦截其他网络流量。
+本扩展通过以下方式获取和处理数据：
 
-**English Version:**
-This extension uses the `webRequest` permission to monitor game API requests in order to:
-- Capture financial data in real-time for balance sheet generation (XIT FINBS)
-- Track supply consumption and calculate remaining days (XIT BURN)
-- Optimize data loading workflows for improved responsiveness
+**技术实现**：
+1. **WebSocket 和 XMLHttpRequest 代理**：通过 JavaScript Proxy 拦截游戏自身的网络通信
+2. **DOM 解析**：直接从游戏页面的 HTML 结构中提取数据
+3. **Content Script**：在页面上下文中运行，访问游戏的全局对象和函数
+4. **本地存储**：使用 `chrome.storage` API 保存用户设置
 
-The extension only monitors official game API requests and does not interfere with other network traffic.
+**不使用**：
+- ❌ `chrome.webRequest` API（所有数据拦截通过 JavaScript Proxy 实现）
+- ❌ `chrome.notifications` API（使用标准 Web Notifications API）
+- ❌ 后台服务器（所有数据处理都在本地浏览器中完成）
+- ❌ 跨站跟踪（仅访问游戏官方域名）
 
 ---
 
-### 6. 数据使用合规性确认（Data Usage Compliance）
+### 5. 数据使用合规性确认（Data Usage Compliance）
 **中文版本：**
 本扩展遵守 Chrome 开发者计划政策，承诺：
 - 不收集用户个人信息
@@ -96,15 +95,15 @@ This extension complies with Chrome Developer Program Policies by:
 
 ## 其他发布要求
 
-### 7. 详细说明（至少 25 个字符）
+### 6. 详细说明（至少 25 个字符）
 已在之前提供的中英双语说明中满足（约 800+ 字符）。
 
-### 8. 联系电子邮件
+### 7. 联系电子邮件
 需要您在 Chrome Web Store 开发者后台的"账号"标签页中：
 1. 输入您的联系邮箱
 2. 点击验证链接完成验证
 
-### 9. 屏幕截图要求
+### 8. 屏幕截图要求
 建议提供 3-5 张展示核心功能的截图：
 - XIT BURN 物资监控界面
 - XIT FINBS 财务报表界面
@@ -114,7 +113,7 @@ This extension complies with Chrome Developer Program Policies by:
 
 截图尺寸：1280x800 或 640x400（Chrome 商店推荐）
 
-### 10. 图标要求
+### 9. 图标要求
 确保项目根目录下的 `icons/` 文件夹中包含以下尺寸的图标：
 - 128x128 (必需)
 - 48x48
