@@ -145,6 +145,8 @@ function init() {
   // 检查权限状态
   if (Notification.permission === 'granted') {
     console.log('[Notification Banner] Notification permission already granted');
+    // 显示确认提示
+    showSuccessBanner();
     return;
   }
 
@@ -158,6 +160,54 @@ function init() {
   // 等待页面加载完成后显示横幅
   setTimeout(() => {
     createGameStyleBanner();
+  }, 2000);
+}
+
+function showSuccessBanner() {
+  console.log('[Notification Banner] Showing success confirmation');
+
+  const banner = document.createElement('div');
+  banner.style.cssText = `
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(25, 30, 40, 0.95);
+    border: 2px solid #4caf50;
+    border-radius: 4px;
+    padding: 12px 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    z-index: 99999;
+    font-family: 'Courier New', monospace;
+    animation: fadeInOut 2s ease-in-out;
+  `;
+
+  banner.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="font-size: 20px;">✅</span>
+      <div style="color: #4caf50; font-weight: bold; font-size: 13px;">
+        [ SHIP NOTIFICATION SYSTEM ACTIVE ]
+      </div>
+    </div>
+  `;
+
+  // 添加动画
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translate(-50%, -20px); }
+      15% { opacity: 1; transform: translate(-50%, 0); }
+      85% { opacity: 1; transform: translate(-50%, 0); }
+      100% { opacity: 0; transform: translate(-50%, -20px); }
+    }
+  `;
+  document.head.appendChild(style);
+
+  document.body.appendChild(banner);
+
+  // 2秒后自动移除
+  setTimeout(() => {
+    banner.remove();
   }, 2000);
 }
 
