@@ -87,6 +87,21 @@ function createNotification(registration: string, destination: string) {
 function init() {
   console.log('[Ship Notification] Initializing ship arrival notification feature');
 
+  // 初始化时，先将所有现有的 SHIP_FLIGHT_ENDED 警报标记为已通知，避免历史记录触发通知
+  const existingAlerts = alertsStore.all.value;
+  if (existingAlerts) {
+    for (const alert of existingAlerts) {
+      if (alert.type === 'SHIP_FLIGHT_ENDED') {
+        notifiedFlights.add(alert.id);
+      }
+    }
+    console.log(
+      '[Ship Notification] Marked',
+      notifiedFlights.size,
+      'existing arrivals as notified',
+    );
+  }
+
   // 监听所有新增的警报
   watchEffect(() => {
     const alerts = alertsStore.all.value;
