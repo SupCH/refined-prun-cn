@@ -537,6 +537,7 @@ export default {
     'nots-notification-type-label': 'NOTS：增加通知类型的标签。',
     'nots-ship-arrival-inventory': 'NOTS：点击飞船抵达通知时打开对应库存。',
     'nots-ship-arrival-system-notification': 'NOTS：飞船抵达时发送 Windows 系统通知。',
+    'ship-departure-notification': '飞船出发时发送 Windows 系统通知（显示预计飞行时间）。',
     'prod-burn-link': 'PROD：在上下文栏增加 XITBURN 链接。',
     'prod-hide-percent': 'PROD : 在订单列表中隐藏百分比值。',
     'prod-order-eta': 'PROD：为订单增加预计完成时间标签。',

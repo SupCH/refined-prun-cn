@@ -61,6 +61,7 @@ import './nots-material-ticker';
 import './nots-notification-type-label';
 import './nots-ship-arrival-inventory';
 import './nots-ship-arrival-system-notification';
+import './ship-departure-notification';
 import './other-context-notification-count';
 import './prevent-delete-button-misclicks';
 import './prod-burn-link';
