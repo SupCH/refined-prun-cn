@@ -1,5 +1,11 @@
 # Refined PrUn 中文汉化版
 
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/SupCH/refined-prun-cn?style=flat-square)](https://github.com/SupCH/refined-prun-cn/releases)
+[![GitHub license](https://img.shields.io/github/license/SupCH/refined-prun-cn?style=flat-square)](https://github.com/SupCH/refined-prun-cn/blob/main/LICENSE)
+[![GitHub repo size](https://img.shields.io/github/repo-size/SupCH/refined-prun-cn?style=flat-square)](https://github.com/SupCH/refined-prun-cn)
+[![GitHub contributors](https://img.shields.io/github/contributors/SupCH/refined-prun-cn?style=flat-square)](https://github.com/SupCH/refined-prun-cn/graphs/contributors)
+
+
 ## 🎯 核心价值
 
 **本扩展专为《星海远航》(Prosperous Universe) 游戏玩家设计**，提供：
@@ -130,6 +136,8 @@ This extension is built from source code using TypeScript and Vite. Reviewers ca
 - `manifest.base.json` is used as the template for the final `manifest.json`.
 
 ---
+
+Made with ♥ by [SupCH](https://github.com/SupCH) and [PRUNplanner](https://github.com/refined-prun/refined-prun) contributors.
 
 ## ⚖️ 许可
 本项目基于原作者 [Razenpok](https://github.com/refined-prun/refined-prun) 的开源项目二次开发，遵循 MIT 开源协议。
