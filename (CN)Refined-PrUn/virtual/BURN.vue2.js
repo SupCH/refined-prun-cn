@@ -10,7 +10,7 @@ import MaterialRow from './MaterialRow.vue.js';
 import { materialsStore } from './materials.js';
 import { useXitParameters } from './use-xit-parameters.js';
 import { sitesStore } from './sites.js';
-import { countDays } from './utils5.js';
+import { countDays } from './utils4.js';
 import InlineFlex from './InlineFlex.vue.js';
 import { findWithQuery } from './find-with-query.js';
 import { convertToPlanetNaturalId } from './planet-natural-id.js';

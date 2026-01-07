@@ -1,5 +1,5 @@
 import PrunLink from './PrunLink.vue.js';
-import { isFactionContract } from './utils4.js';
+import { isFactionContract } from './utils5.js';
 import fa from './font-awesome.module.css.js';
 import coloredValue from './colored-value.module.css.js';
 import {

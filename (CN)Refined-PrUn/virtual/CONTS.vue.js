@@ -2,7 +2,7 @@ import { t } from './index5.js';
 import LoadingSpinner from './LoadingSpinner.vue.js';
 import { contractsStore } from './contracts.js';
 import _sfc_main$1 from './ContractRow.vue.js';
-import { canAcceptContract } from './utils4.js';
+import { canAcceptContract } from './utils5.js';
 import { isEmpty } from './is-empty.js';
 import {
   defineComponent,

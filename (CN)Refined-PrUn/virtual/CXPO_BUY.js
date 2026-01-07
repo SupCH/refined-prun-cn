@@ -83,6 +83,7 @@ const CXPO_BUY = act.addActionStep({
     const priceInput = inputs[1];
     assert(priceInput !== void 0, 'Missing price input');
     let shouldUnwatch = false;
+    let hasWarnedAboutMissingData = false;
     const unwatch = watchEffect(() => {
       if (shouldUnwatch) {
         unwatch();
@@ -90,10 +91,15 @@ const CXPO_BUY = act.addActionStep({
       }
       const filled = fillAmount(cxTicker, amount, priceLimit);
       if (!filled) {
-        shouldUnwatch = true;
-        fail(`Missing ${cxTicker} order book data`);
+        if (!hasWarnedAboutMissingData) {
+          log.warning(
+            `等待 ${cxTicker} 订单簿数据加载... (Waiting for ${cxTicker} order book data to load...)`,
+          );
+          hasWarnedAboutMissingData = true;
+        }
         return;
       }
+      hasWarnedAboutMissingData = false;
       if (filled.amount < amount && !data.allowUnfilled) {
         if (!data.buyPartial) {
           let message2 = `Not enough materials on ${exchange} to buy ${fixed0(amount)} ${ticker}`;

@@ -410,6 +410,7 @@ export default {
     'nots-material-ticker': 'nots-material-ticker',
     'nots-notification-type-label': 'nots-notification-type-label',
     'nots-ship-arrival-inventory': 'nots-ship-arrival-inventory',
+    'nots-ship-arrival-system-notification': 'nots-ship-arrival-system-notification',
     'prod-burn-link': 'prod-burn-link',
     'prod-hide-percent': 'prod-hide-percent',
     'prod-order-eta': 'prod-order-eta',

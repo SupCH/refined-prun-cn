@@ -1,7 +1,7 @@
 import { C, prunStyleUpdated } from './prun-css.js';
 import { showBuffer } from './buffers.js';
 import { userData } from './user-data.js';
-import { canAcceptContract } from './utils4.js';
+import { canAcceptContract } from './utils5.js';
 import { contractsStore } from './contracts.js';
 import { vDraggable as so } from './vue-draggable-plus.js';
 import { objectId } from './object-id.js';

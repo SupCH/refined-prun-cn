@@ -1,5 +1,5 @@
 import PlanetHeader from './PlanetHeader.vue.js';
-import _sfc_main$1 from './MaterialList.vue.js';
+import _sfc_main$1 from './MaterialList.vue2.js';
 import { useTileState } from './tile-state5.js';
 import {
   defineComponent,

@@ -1,5 +1,5 @@
 import PrunLink from './PrunLink.vue.js';
-import { isFactionContract } from './utils4.js';
+import { isFactionContract } from './utils5.js';
 import {
   defineComponent,
   computed,

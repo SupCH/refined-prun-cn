@@ -20,7 +20,8 @@
     },
     "permissions": [
         "storage",
-        "webRequest"
+        "webRequest",
+        "notifications"
     ],
     "host_permissions": [
         "https://apex.prosperousuniverse.com/*"
