@@ -87,10 +87,6 @@ function createNotification(registration: string, destination: string) {
 
   const notification = new Notification(title, {
     body,
-    icon: chrome.runtime.getURL('icons/icon128.png'),
-    badge: chrome.runtime.getURL('icons/icon128.png'),
-    requireInteraction: false,
-    silent: false,
   });
 
   console.log('[Ship Notification] Notification created successfully');

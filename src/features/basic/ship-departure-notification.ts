@@ -124,10 +124,6 @@ function createDepartureNotification(
 
   const notification = new Notification(title, {
     body,
-    icon: chrome.runtime.getURL('icons/icon128.png'),
-    badge: chrome.runtime.getURL('icons/icon128.png'),
-    requireInteraction: false,
-    silent: false,
   });
 
   console.log('[Ship Departure] Notification created successfully');
