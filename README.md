@@ -137,7 +137,7 @@ This extension is built from source code using TypeScript and Vite. Reviewers ca
 
 ---
 
-Made with ♥ by [SupCH](https://github.com/SupCH) and [PRUNplanner](https://github.com/refined-prun/refined-prun) contributors.
+Made with ♥ by [SupCH](https://github.com/SupCH) and [refined-prun](https://github.com/refined-prun/refined-prun) contributors.
 
 ## ⚖️ 许可
 本项目基于原作者 [Razenpok](https://github.com/refined-prun/refined-prun) 的开源项目二次开发，遵循 MIT 开源协议。
