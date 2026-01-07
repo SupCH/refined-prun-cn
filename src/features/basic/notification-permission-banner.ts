@@ -1,122 +1,136 @@
-// 创建通知权限请求横幅
-function createNotificationBanner() {
-  console.log('[Notification Banner] Creating permission request banner');
+// 游戏风格的通知权限横幅
+function createGameStyleBanner() {
+  console.log('[Notification Banner] Creating game-style notification banner');
 
   const banner = document.createElement('div');
   banner.id = 'refined-prun-notification-banner';
   banner.style.cssText = `
     position: fixed;
-    top: 50px;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    z-index: 9999;
-    font-family: system-ui, -apple-system, sans-serif;
-    animation: slideDown 0.3s ease-out;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    background: rgba(25, 30, 40, 0.95);
+    border: 2px solid #4a90e2;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    z-index: 99999;
+    font-family: 'Courier New', monospace;
+    animation: slideDown 0.4s ease-out;
   `;
 
   banner.innerHTML = `
-    <div style="font-size: 24px;">🔔</div>
-    <div style="flex: 1;">
-      <div style="font-weight: bold; font-size: 14px; margin-bottom: 4px;">启用船只通知</div>
-      <div style="font-size: 12px; opacity: 0.9;">点击允许后，船只出发和到达时会收到系统通知</div>
-    </div>
-    <div style="display: flex; gap: 10px;">
-      <button class="dismiss-btn" style="
-        padding: 8px 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 13px;
-        background: rgba(255,255,255,0.2);
-        color: white;
-      ">稍后</button>
-      <button class="enable-btn" style="
-        padding: 8px 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 13px;
-        background: white;
-        color: #667eea;
-        font-weight: bold;
-      ">启用通知</button>
+    <div style="padding: 16px;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+        <span style="font-size: 24px;">🚀</span>
+        <div style="flex: 1;">
+          <div style="color: #4a90e2; font-weight: bold; font-size: 14px; margin-bottom: 4px;">
+            [ SHIP NOTIFICATION SYSTEM ]
+          </div>
+          <div style="color: #8a9aa9; font-size: 12px;">
+            系统检测到通知功能未启用
+          </div>
+        </div>
+        <button class="close-btn" style="
+          background: transparent;
+          border: 1px solid #666;
+          color: #999;
+          padding: 4px 8px;
+          cursor: pointer;
+          font-size: 18px;
+          border-radius: 3px;
+        ">×</button>
+      </div>
+      
+      <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 3px; margin-bottom: 12px;">
+        <div style="color: #ddd; font-size: 13px; line-height: 1.6;">
+          <div style="margin-bottom: 8px; color: #ffa726;">
+            ⚠️ 通知权限未授予或系统通知被禁用
+          </div>
+          <div style="margin-bottom: 4px;">启用后可接收船只出发/到达提醒：</div>
+          <div style="padding-left: 12px; color: #8a9aa9; font-size: 12px;">
+            1. 点击地址栏左侧的 🔒 锁图标<br>
+            2. 找到"通知"权限选项<br>
+            3. 改为"允许"<br>
+            4. 刷新页面
+          </div>
+        </div>
+      </div>
+      
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button class="dismiss-btn" style="
+          background: rgba(255,255,255,0.1);
+          border: 1px solid #666;
+          color: #ddd;
+          padding: 8px 16px;
+          cursor: pointer;
+          font-size: 12px;
+          border-radius: 3px;
+          font-family: 'Courier New', monospace;
+        ">[ 稍后提醒 ]</button>
+        <button class="close-permanent-btn" style="
+          background: rgba(74, 144, 226, 0.2);
+          border: 1px solid #4a90e2;
+          color: #4a90e2;
+          padding: 8px 16px;
+          cursor: pointer;
+          font-size: 12px;
+          border-radius: 3px;
+          font-family: 'Courier New', monospace;
+        ">[ 不再提示 ]</button>
+      </div>
     </div>
   `;
 
-  // 添加动画样式
+  // 添加动画
   const style = document.createElement('style');
   style.textContent = `
     @keyframes slideDown {
       from {
-        transform: translateY(-100%);
+        transform: translate(-50%, -100%);
         opacity: 0;
       }
       to {
-        transform: translateY(0);
+        transform: translate(-50%, 0);
         opacity: 1;
       }
     }
   `;
   document.head.appendChild(style);
 
-  // "稍后"按钮事件
-  const dismissBtn = banner.querySelector('.dismiss-btn');
-  dismissBtn.addEventListener('click', () => {
-    console.log('[Notification Banner] User clicked "Later"');
-    banner.style.animation = 'slideDown 0.3s ease-out reverse';
-    setTimeout(() => {
-      banner.remove();
-    }, 300);
-    localStorage.setItem('rprun-notification-banner-dismissed', 'true');
-  });
+  // 关闭按钮
+  const closeBtn = banner.querySelector('.close-btn') as HTMLButtonElement;
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      banner.style.animation = 'slideDown 0.3s ease-out reverse';
+      setTimeout(() => banner.remove(), 300);
+    });
+  }
 
-  // "启用通知"按钮事件
-  const enableBtn = banner.querySelector('.enable-btn');
-  enableBtn.addEventListener('click', async () => {
-    console.log('[Notification Banner] User clicked "Enable Notifications"');
-    try {
-      const permission = await Notification.requestPermission();
-      console.log('[Notification Banner] Permission result:', permission);
+  // "稍后提醒"按钮
+  const dismissBtn = banner.querySelector('.dismiss-btn') as HTMLButtonElement;
+  if (dismissBtn) {
+    dismissBtn.addEventListener('click', () => {
+      console.log('[Notification Banner] User clicked "Dismiss"');
+      banner.style.animation = 'slideDown 0.3s ease-out reverse';
+      setTimeout(() => banner.remove(), 300);
+      // 不保存到 localStorage，下次刷新还会显示
+    });
+  }
 
-      if (permission === 'granted') {
-        // 成功授权，显示成功消息并移除横幅
-        banner.querySelector('div[style*="flex: 1"]').innerHTML = `
-          <div style="font-weight: bold; font-size: 14px; margin-bottom: 4px;">✅ 通知已启用</div>
-          <div style="font-size: 12px; opacity: 0.9;">您将在船只出发和到达时收到系统通知</div>
-        `;
-        banner.querySelector('.dismiss-btn').style.display = 'none';
-        banner.querySelector('.enable-btn').style.display = 'none';
-
-        setTimeout(() => {
-          banner.style.animation = 'slideDown 0.3s ease-out reverse';
-          setTimeout(() => {
-            banner.remove();
-          }, 300);
-        }, 2000);
-      } else if (permission === 'denied') {
-        // 用户拒绝
-        console.warn('[Notification Banner] User denied notification permission');
-        banner.querySelector('div[style*="flex: 1"]').innerHTML = `
-          <div style="font-weight: bold; font-size: 14px; margin-bottom: 4px;">⚠️ 通知权限被拒绝</div>
-          <div style="font-size: 12px; opacity: 0.9;">您可以在浏览器设置中手动启用通知权限</div>
-        `;
-        banner.querySelector('.dismiss-btn').textContent = '关闭';
-        banner.querySelector('.enable-btn').style.display = 'none';
-      }
-    } catch (error) {
-      console.error('[Notification Banner] Error requesting permission:', error);
-    }
-  });
+  // "不再提示"按钮
+  const closePermanentBtn = banner.querySelector('.close-permanent-btn') as HTMLButtonElement;
+  if (closePermanentBtn) {
+    closePermanentBtn.addEventListener('click', () => {
+      console.log('[Notification Banner] User clicked "Do not show again"');
+      banner.style.animation = 'slideDown 0.3s ease-out reverse';
+      setTimeout(() => banner.remove(), 300);
+      localStorage.setItem('rprun-notification-banner-dismissed', 'true');
+    });
+  }
 
   document.body.appendChild(banner);
-  console.log('[Notification Banner] Banner displayed');
+  console.log('[Notification Banner] Game-style banner displayed');
 }
 
 function init() {
@@ -129,29 +143,26 @@ function init() {
   }
 
   // 检查权限状态
-  if (Notification.permission !== 'default') {
-    console.log(
-      '[Notification Banner] Notification permission already set:',
-      Notification.permission,
-    );
+  if (Notification.permission === 'granted') {
+    console.log('[Notification Banner] Notification permission already granted');
     return;
   }
 
-  // 检查用户是否已关闭横幅
+  // 检查用户是否已永久关闭横幅
   const dismissed = localStorage.getItem('rprun-notification-banner-dismissed');
   if (dismissed === 'true') {
-    console.log('[Notification Banner] Banner was dismissed by user');
+    console.log('[Notification Banner] Banner was permanently dismissed by user');
     return;
   }
 
   // 等待页面加载完成后显示横幅
   setTimeout(() => {
-    createNotificationBanner();
-  }, 1500);
+    createGameStyleBanner();
+  }, 2000);
 }
 
 features.add(
   import.meta.url,
   init,
-  'Shows a banner to request notification permissions with user interaction.',
+  'Shows a game-styled banner to guide users to enable notification permissions.',
 );
