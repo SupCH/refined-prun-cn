@@ -1,0 +1,12 @@
+function sum(...values) {
+  let result = 0;
+  for (const item of values) {
+    if (item === void 0) {
+      return void 0;
+    }
+    result += item;
+  }
+  return result;
+}
+export { sum };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3VtLmpzIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvdXRpbHMvc3VtLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBzdW0oLi4udmFsdWVzOiBudW1iZXJbXSk6IG51bWJlcjtcbmV4cG9ydCBmdW5jdGlvbiBzdW0oLi4udmFsdWVzOiAobnVtYmVyIHwgdW5kZWZpbmVkKVtdKTogbnVtYmVyIHwgdW5kZWZpbmVkO1xuXG5leHBvcnQgZnVuY3Rpb24gc3VtKC4uLnZhbHVlczogKG51bWJlciB8IHVuZGVmaW5lZClbXSk6IG51bWJlciB8IHVuZGVmaW5lZCB7XG4gIGxldCByZXN1bHQgPSAwO1xuICBmb3IgKGNvbnN0IGl0ZW0gb2YgdmFsdWVzKSB7XG4gICAgaWYgKGl0ZW0gPT09IHVuZGVmaW5lZCkge1xuICAgICAgcmV0dXJuIHVuZGVmaW5lZDtcbiAgICB9XG4gICAgcmVzdWx0ICs9IGl0ZW07XG4gIH1cbiAgcmV0dXJuIHJlc3VsdDtcbn1cbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFHTyxTQUFTLE9BQU8sUUFBb0Q7QUFDekUsTUFBSSxTQUFTO0FBQ2IsYUFBVyxRQUFRLFFBQVE7QUFDekIsUUFBSSxTQUFTLFFBQVc7QUFDdEIsYUFBTztBQUFBLElBQ1Q7QUFDQSxjQUFVO0FBQUEsRUFDWjtBQUNBLFNBQU87QUFDVDsifQ==

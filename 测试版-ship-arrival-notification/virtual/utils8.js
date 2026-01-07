@@ -1,0 +1,5 @@
+function isValidPackageName(name) {
+  return /^[ 0-9a-zA-Z.-]*$/.test(name);
+}
+export { isValidPackageName };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXRpbHM4LmpzIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvZmVhdHVyZXMvWElUL0FDVC91dGlscy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZnVuY3Rpb24gaXNWYWxpZFBhY2thZ2VOYW1lKG5hbWU6IHN0cmluZykge1xuICByZXR1cm4gL15bIDAtOWEtekEtWi4tXSokLy50ZXN0KG5hbWUpO1xufVxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFPLFNBQVMsbUJBQW1CLE1BQWM7QUFDL0MsU0FBTyxvQkFBb0IsS0FBSyxJQUFJO0FBQ3RDOyJ9

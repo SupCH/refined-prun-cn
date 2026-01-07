@@ -1,0 +1,14 @@
+const item = 'rp-AddTaskItem__item___43d3125';
+const checkmark = 'rp-AddTaskItem__checkmark___610406f';
+const plus = 'rp-AddTaskItem__plus___6b7b078';
+const plusHover = 'rp-AddTaskItem__plusHover___f4736e9';
+const content = 'rp-AddTaskItem__content___be4ccd9';
+const style0 = {
+  item,
+  checkmark,
+  plus,
+  plusHover,
+  content,
+};
+export { checkmark, content, style0 as default, item, plus, plusHover };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQWRkVGFza0l0ZW0udnVlMy5qcyIsInNvdXJjZXMiOltdLCJzb3VyY2VzQ29udGVudCI6W10sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7OzsifQ==

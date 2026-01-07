@@ -1,0 +1,12 @@
+function isValidUrl(url) {
+  if (!url) {
+    return false;
+  }
+  try {
+    return Boolean(new URL(url));
+  } catch {
+    return false;
+  }
+}
+export { isValidUrl };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaXMtdmFsaWQtdXJsLmpzIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvdXRpbHMvaXMtdmFsaWQtdXJsLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBpc1ZhbGlkVXJsKHVybD86IHN0cmluZyB8IG51bGwpIHtcbiAgaWYgKCF1cmwpIHtcbiAgICByZXR1cm4gZmFsc2U7XG4gIH1cbiAgdHJ5IHtcbiAgICByZXR1cm4gQm9vbGVhbihuZXcgVVJMKHVybCkpO1xuICB9IGNhdGNoIHtcbiAgICByZXR1cm4gZmFsc2U7XG4gIH1cbn1cbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBTyxTQUFTLFdBQVcsS0FBcUI7QUFDOUMsTUFBSSxDQUFDLEtBQUs7QUFDUixXQUFPO0FBQUEsRUFDVDtBQUNBLE1BQUk7QUFDRixXQUFPLFFBQVEsSUFBSSxJQUFJLEdBQUcsQ0FBQztBQUFBLEVBQzdCLFFBQVE7QUFDTixXQUFPO0FBQUEsRUFDVDtBQUNGOyJ9

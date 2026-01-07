@@ -1,0 +1,7 @@
+import { inject } from './runtime-core.esm-bundler.js';
+function useTile() {
+  return inject(tileKey);
+}
+const tileKey = Symbol();
+export { tileKey, useTile };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXNlLXRpbGUuanMiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9ob29rcy91c2UtdGlsZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZnVuY3Rpb24gdXNlVGlsZSgpIHtcbiAgcmV0dXJuIGluamVjdCh0aWxlS2V5KSE7XG59XG5cbmV4cG9ydCBjb25zdCB0aWxlS2V5ID0gU3ltYm9sKCkgYXMgSW5qZWN0aW9uS2V5PFBydW5UaWxlPjtcbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQU8sU0FBQSxVQUFBO0FBQ0wsU0FBQSxPQUFBLE9BQUE7QUFDRjtBQUVPLE1BQUEsVUFBQSxPQUFBOyJ9

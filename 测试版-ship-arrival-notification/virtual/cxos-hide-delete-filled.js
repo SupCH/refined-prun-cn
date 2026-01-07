@@ -1,0 +1,13 @@
+import { applyCssRule } from './refined-prun-css.js';
+import { C } from './prun-css.js';
+import features from './feature-registry.js';
+import css from './css-utils.module.css.js';
+function init() {
+  applyCssRule('CXOS', `.${C.Button.btn} + .${C.ActionBar.container}`, css.hidden);
+}
+features.add(
+  import.meta.url,
+  init,
+  'CXOS: Hides the "Delete Filled" button when filters are hidden.',
+);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY3hvcy1oaWRlLWRlbGV0ZS1maWxsZWQuanMiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9mZWF0dXJlcy9hZHZhbmNlZC9jeG9zLWhpZGUtZGVsZXRlLWZpbGxlZC50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgY3NzIGZyb20gJ0BzcmMvdXRpbHMvY3NzLXV0aWxzLm1vZHVsZS5jc3MnO1xuXG5mdW5jdGlvbiBpbml0KCkge1xuICAvLyBUaGlzIHNlbGVjdG9yIHdpbGwgb25seSB0cmlnZ2VyIHdoZW4gdGhlIGZpbHRlcnMgYXJlIGhpZGRlbiwgc2luY2UgdGhlcmUgd2lsbCBiZVxuICAvLyBubyBvdGhlciBlbGVtZW50cyBiZXR3ZWVuIHRoZSBcImNsZWFyIG1hdGVyaWFsIGZpbHRlcnNcIiBidXR0b24gYW5kXG4gIC8vIHRoZSBhY3Rpb24gYmFyIHdpdGggdGhlIFwiRGVsZXRlIEZpbGxlZFwiIGJ1dHRvbi5cbiAgYXBwbHlDc3NSdWxlKCdDWE9TJywgYC4ke0MuQnV0dG9uLmJ0bn0gKyAuJHtDLkFjdGlvbkJhci5jb250YWluZXJ9YCwgY3NzLmhpZGRlbik7XG59XG5cbmZlYXR1cmVzLmFkZChcbiAgaW1wb3J0Lm1ldGEudXJsLFxuICBpbml0LFxuICAnQ1hPUzogSGlkZXMgdGhlIFwiRGVsZXRlIEZpbGxlZFwiIGJ1dHRvbiB3aGVuIGZpbHRlcnMgYXJlIGhpZGRlbi4nLFxuKTtcbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBRUEsU0FBQSxPQUFBO0FBSUUsZUFBQSxRQUFBLElBQUEsRUFBQSxPQUFBLEdBQUEsT0FBQSxFQUFBLFVBQUEsU0FBQSxJQUFBLElBQUEsTUFBQTtBQUNGO0FBRUEsU0FBQTtBQUFBLEVBQVMsWUFBQTtBQUFBLEVBQ0s7QUFBQSxFQUNaO0FBRUY7In0=

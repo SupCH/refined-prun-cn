@@ -1,0 +1,14 @@
+import { onApiMessage } from './api-messages.js';
+import { shallowReactive } from './reactivity.esm-bundler.js';
+import { computed } from './runtime-core.esm-bundler.js';
+const userDataStore = shallowReactive({});
+const companyContextId = computed(
+  () => userDataStore.contexts?.find(x => x.type === 'COMPANY')?.id,
+);
+onApiMessage({
+  USER_DATA(data) {
+    Object.assign(userDataStore, data);
+  },
+});
+export { companyContextId, userDataStore };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXNlci1kYXRhMi5qcyIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2luZnJhc3RydWN0dXJlL3BydW4tYXBpL2RhdGEvdXNlci1kYXRhLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IG9uQXBpTWVzc2FnZSB9IGZyb20gJ0BzcmMvaW5mcmFzdHJ1Y3R1cmUvcHJ1bi1hcGkvZGF0YS9hcGktbWVzc2FnZXMnO1xuXG4vLyBXaWxsIGJlIGluaXRpYWxpemVkIGJlZm9yZSBVSSwgc28gbm8gbmVlZCBmb3IgdW5kZWZpbmVkIG9yIGZhbGxiYWNrcy5cbmV4cG9ydCBjb25zdCB1c2VyRGF0YVN0b3JlID0gc2hhbGxvd1JlYWN0aXZlPFBydW5BcGkuVXNlckRhdGE+KHt9IGFzIFBydW5BcGkuVXNlckRhdGEpO1xuXG5leHBvcnQgY29uc3QgY29tcGFueUNvbnRleHRJZCA9IGNvbXB1dGVkKFxuICAoKSA9PiB1c2VyRGF0YVN0b3JlLmNvbnRleHRzPy5maW5kKHggPT4geC50eXBlID09PSAnQ09NUEFOWScpPy5pZCxcbik7XG5cbm9uQXBpTWVzc2FnZSh7XG4gIFVTRVJfREFUQShkYXRhOiBQcnVuQXBpLlVzZXJEYXRhKSB7XG4gICAgT2JqZWN0LmFzc2lnbih1c2VyRGF0YVN0b3JlLCBkYXRhKTtcbiAgfSxcbn0pO1xuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUdPLE1BQUEsZ0JBQUEsZ0JBQUEsQ0FBQSxDQUFBO0FBRUEsTUFBQSxtQkFBQTtBQUFBLEVBQXlCLE1BQUEsY0FBQSxVQUFBLEtBQUEsQ0FBQSxNQUFBLEVBQUEsU0FBQSxTQUFBLEdBQUE7QUFFaEM7QUFFQSxhQUFBO0FBQUEsRUFBYSxVQUFBLE1BQUE7QUFFVCxXQUFBLE9BQUEsZUFBQSxJQUFBO0FBQUEsRUFBaUM7QUFFckMsQ0FBQTsifQ==

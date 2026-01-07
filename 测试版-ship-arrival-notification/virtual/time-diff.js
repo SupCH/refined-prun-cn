@@ -1,0 +1,12 @@
+function diffDays(from, to, float = false) {
+  const diff = to - from;
+  const days = diff / 864e5;
+  return float ? days : days >= 0 ? Math.floor(days) : Math.ceil(days);
+}
+function diffHours(from, to, float = false) {
+  const diff = to - from;
+  const days = diff / 36e5;
+  return float ? days : days >= 0 ? Math.floor(days) : Math.ceil(days);
+}
+export { diffDays, diffHours };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGltZS1kaWZmLmpzIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvdXRpbHMvdGltZS1kaWZmLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBkaWZmRGF5cyhmcm9tOiBudW1iZXIsIHRvOiBudW1iZXIsIGZsb2F0ID0gZmFsc2UpIHtcbiAgY29uc3QgZGlmZiA9IHRvIC0gZnJvbTtcbiAgY29uc3QgZGF5cyA9IGRpZmYgLyA4NjQwMDAwMDtcbiAgcmV0dXJuIGZsb2F0ID8gZGF5cyA6IGRheXMgPj0gMCA/IE1hdGguZmxvb3IoZGF5cykgOiBNYXRoLmNlaWwoZGF5cyk7XG59XG5cbmV4cG9ydCBmdW5jdGlvbiBkaWZmSG91cnMoZnJvbTogbnVtYmVyLCB0bzogbnVtYmVyLCBmbG9hdCA9IGZhbHNlKSB7XG4gIGNvbnN0IGRpZmYgPSB0byAtIGZyb207XG4gIGNvbnN0IGRheXMgPSBkaWZmIC8gMzYwMDAwMDtcbiAgcmV0dXJuIGZsb2F0ID8gZGF5cyA6IGRheXMgPj0gMCA/IE1hdGguZmxvb3IoZGF5cykgOiBNYXRoLmNlaWwoZGF5cyk7XG59XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQU8sU0FBUyxTQUFTLE1BQWMsSUFBWSxRQUFRLE9BQU87QUFDaEUsUUFBTSxPQUFPLEtBQUs7QUFDbEIsUUFBTSxPQUFPLE9BQU87QUFDcEIsU0FBTyxRQUFRLE9BQU8sUUFBUSxJQUFJLEtBQUssTUFBTSxJQUFJLElBQUksS0FBSyxLQUFLLElBQUk7QUFDckU7QUFFTyxTQUFTLFVBQVUsTUFBYyxJQUFZLFFBQVEsT0FBTztBQUNqRSxRQUFNLE9BQU8sS0FBSztBQUNsQixRQUFNLE9BQU8sT0FBTztBQUNwQixTQUFPLFFBQVEsT0FBTyxRQUFRLElBQUksS0FBSyxNQUFNLElBQUksSUFBSSxLQUFLLEtBQUssSUFBSTtBQUNyRTsifQ==

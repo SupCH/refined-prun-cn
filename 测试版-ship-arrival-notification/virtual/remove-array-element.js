@@ -1,0 +1,8 @@
+function removeArrayElement(array, item) {
+  const index = array.indexOf(item);
+  if (index > -1) {
+    array.splice(index, 1);
+  }
+}
+export { removeArrayElement as default };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmVtb3ZlLWFycmF5LWVsZW1lbnQuanMiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy91dGlscy9yZW1vdmUtYXJyYXktZWxlbWVudC50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCBmdW5jdGlvbiByZW1vdmVBcnJheUVsZW1lbnQ8VD4oYXJyYXk6IFRbXSwgaXRlbTogVCk6IHZvaWQge1xuICBjb25zdCBpbmRleCA9IGFycmF5LmluZGV4T2YoaXRlbSk7XG4gIGlmIChpbmRleCA+IC0xKSB7XG4gICAgYXJyYXkuc3BsaWNlKGluZGV4LCAxKTtcbiAgfVxufVxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLFNBQXdCLG1CQUFzQixPQUFZLE1BQWU7QUFDdkUsUUFBTSxRQUFRLE1BQU0sUUFBUSxJQUFJO0FBQ2hDLE1BQUksUUFBUSxJQUFJO0FBQ2QsVUFBTSxPQUFPLE9BQU8sQ0FBQztBQUFBLEVBQ3ZCO0FBQ0Y7In0=

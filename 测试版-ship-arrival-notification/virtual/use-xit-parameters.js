@@ -1,0 +1,7 @@
+import { inject } from './runtime-core.esm-bundler.js';
+function useXitParameters() {
+  return inject(xitParametersKey) ?? [];
+}
+const xitParametersKey = Symbol();
+export { useXitParameters, xitParametersKey };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXNlLXhpdC1wYXJhbWV0ZXJzLmpzIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvaG9va3MvdXNlLXhpdC1wYXJhbWV0ZXJzLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiB1c2VYaXRQYXJhbWV0ZXJzKCkge1xuICByZXR1cm4gaW5qZWN0KHhpdFBhcmFtZXRlcnNLZXkpID8/IFtdO1xufVxuXG5leHBvcnQgY29uc3QgeGl0UGFyYW1ldGVyc0tleSA9IFN5bWJvbCgpIGFzIEluamVjdGlvbktleTxzdHJpbmdbXT47XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFPLFNBQUEsbUJBQUE7QUFDTCxTQUFBLE9BQUEsZ0JBQUEsS0FBQSxDQUFBO0FBQ0Y7QUFFTyxNQUFBLG1CQUFBLE9BQUE7In0=

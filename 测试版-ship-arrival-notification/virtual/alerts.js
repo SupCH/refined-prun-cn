@@ -1,0 +1,18 @@
+import { createEntityStore } from './create-entity-store.js';
+import { onApiMessage } from './api-messages.js';
+const store = createEntityStore();
+const state = store.state;
+onApiMessage({
+  ALERTS_ALERTS(data) {
+    store.setMany(data.alerts);
+    store.setFetched();
+  },
+  ALERTS_ALERT(data) {
+    store.setOne(data);
+  },
+});
+const alertsStore = {
+  ...state,
+};
+export { alertsStore };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYWxlcnRzLmpzIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvaW5mcmFzdHJ1Y3R1cmUvcHJ1bi1hcGkvZGF0YS9hbGVydHMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgY3JlYXRlRW50aXR5U3RvcmUgfSBmcm9tICdAc3JjL2luZnJhc3RydWN0dXJlL3BydW4tYXBpL2RhdGEvY3JlYXRlLWVudGl0eS1zdG9yZSc7XG5pbXBvcnQgeyBvbkFwaU1lc3NhZ2UgfSBmcm9tICdAc3JjL2luZnJhc3RydWN0dXJlL3BydW4tYXBpL2RhdGEvYXBpLW1lc3NhZ2VzJztcblxuY29uc3Qgc3RvcmUgPSBjcmVhdGVFbnRpdHlTdG9yZTxQcnVuQXBpLkFsZXJ0PigpO1xuY29uc3Qgc3RhdGUgPSBzdG9yZS5zdGF0ZTtcblxub25BcGlNZXNzYWdlKHtcbiAgQUxFUlRTX0FMRVJUUyhkYXRhOiB7IGFsZXJ0czogUHJ1bkFwaS5BbGVydFtdIH0pIHtcbiAgICBzdG9yZS5zZXRNYW55KGRhdGEuYWxlcnRzKTtcbiAgICBzdG9yZS5zZXRGZXRjaGVkKCk7XG4gIH0sXG4gIEFMRVJUU19BTEVSVChkYXRhOiBQcnVuQXBpLkFsZXJ0KSB7XG4gICAgc3RvcmUuc2V0T25lKGRhdGEpO1xuICB9LFxufSk7XG5cbmV4cG9ydCBjb25zdCBhbGVydHNTdG9yZSA9IHtcbiAgLi4uc3RhdGUsXG59O1xuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBR0EsTUFBTSxRQUFRLGtCQUFBO0FBQ2QsTUFBTSxRQUFRLE1BQU07QUFFcEIsYUFBYTtBQUFBLEVBQ1gsY0FBYyxNQUFtQztBQUMvQyxVQUFNLFFBQVEsS0FBSyxNQUFNO0FBQ3pCLFVBQU0sV0FBQTtBQUFBLEVBQ1I7QUFBQSxFQUNBLGFBQWEsTUFBcUI7QUFDaEMsVUFBTSxPQUFPLElBQUk7QUFBQSxFQUNuQjtBQUNGLENBQUM7QUFFTSxNQUFNLGNBQWM7QUFBQSxFQUN6QixHQUFHO0FBQ0w7In0=

@@ -1,0 +1,5 @@
+function castArray(value) {
+  return Array.isArray(value) ? value : [value];
+}
+export { castArray };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2FzdC1hcnJheS5qcyIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL3V0aWxzL2Nhc3QtYXJyYXkudHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGZ1bmN0aW9uIGNhc3RBcnJheTxJdGVtPih2YWx1ZTogSXRlbSB8IEl0ZW1bXSk6IEl0ZW1bXSB7XG4gIHJldHVybiBBcnJheS5pc0FycmF5KHZhbHVlKSA/IHZhbHVlIDogW3ZhbHVlXTtcbn1cbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBTyxTQUFTLFVBQWdCLE9BQThCO0FBQzVELFNBQU8sTUFBTSxRQUFRLEtBQUssSUFBSSxRQUFRLENBQUMsS0FBSztBQUM5QzsifQ==
