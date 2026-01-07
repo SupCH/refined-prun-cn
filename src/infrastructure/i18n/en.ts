@@ -412,6 +412,7 @@ export default {
     'nots-ship-arrival-inventory': 'nots-ship-arrival-inventory',
     'nots-ship-arrival-system-notification': 'nots-ship-arrival-system-notification',
     'ship-departure-notification': 'ship-departure-notification',
+    'notification-permission-banner': 'notification-permission-banner',
     'prod-burn-link': 'prod-burn-link',
     'prod-hide-percent': 'prod-hide-percent',
     'prod-order-eta': 'prod-order-eta',
