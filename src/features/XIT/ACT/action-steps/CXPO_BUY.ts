@@ -106,6 +106,7 @@ export const CXPO_BUY = act.addActionStep<Data>({
     assert(priceInput !== undefined, 'Missing price input');
 
     let shouldUnwatch = false;
+    let hasWarnedAboutMissingData = false;
     const unwatch = watchEffect(() => {
       if (shouldUnwatch) {
         unwatch();
@@ -115,10 +116,19 @@ export const CXPO_BUY = act.addActionStep<Data>({
       const filled = fillAmount(cxTicker, amount, priceLimit);
 
       if (!filled) {
-        shouldUnwatch = true;
-        fail(`Missing ${cxTicker} order book data`);
+        // Instead of failing immediately, wait for order book data to load
+        if (!hasWarnedAboutMissingData) {
+          log.warning(
+            `等待 ${cxTicker} 订单簿数据加载... (Waiting for ${cxTicker} order book data to load...)`,
+          );
+          hasWarnedAboutMissingData = true;
+        }
+        // Keep watching, don't fail yet
         return;
       }
+
+      // Reset warning flag once data is available
+      hasWarnedAboutMissingData = false;
 
       if (filled.amount < amount && !data.allowUnfilled) {
         if (!data.buyPartial) {

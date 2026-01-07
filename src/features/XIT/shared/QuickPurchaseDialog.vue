@@ -36,6 +36,7 @@ const selectedShip = ref<string | undefined>(undefined);
 const shipStorages = ref<any[]>([]);
 const selectedSites = ref<string[]>([]);
 const resupplyDays = ref<number>(userData.settings.burn.resupply);
+const includePriceFetch = ref<boolean>(true);
 
 // Material selection state
 const selectedMaterials = ref<Set<string>>(new Set());
@@ -248,6 +249,7 @@ function onConfirm() {
     filteredMaterials,
     selectedExchange.value,
     shipStorage,
+    includePriceFetch.value,
   );
 
   const pkgName = addAndNavigateToPackage(pkg);
@@ -428,6 +430,11 @@ function onCreatePriceFetch() {
     </div>
 
     <form :class="$style.form">
+      <Active
+        :label="t('quickPurchase.includePriceFetch')"
+        :tooltip="t('quickPurchase.includePriceFetchTooltip')">
+        <input type="checkbox" v-model="includePriceFetch" />
+      </Active>
       <Active :label="t('quickPurchase.selectExchange')">
         <SelectInput v-model="selectedExchange" :options="exchanges" />
       </Active>

@@ -14,7 +14,7 @@ async function main() {
     return;
   }
 
-  console.log(`Refined PrUn ${config.version}`);
+  console.log(`(zh-cn)refined-prun ${config.version}`);
   initializeUserData();
   features.init();
   xit.init();

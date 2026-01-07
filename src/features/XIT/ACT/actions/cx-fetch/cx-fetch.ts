@@ -15,8 +15,16 @@ const CX_FETCH_STEP = act.addActionStep<Data>({
   execute: async ctx => {
     const { data, complete } = ctx;
     const tickers = data.tickers || [];
+    const sessionId = `cx-fetch-${Date.now()}`;
     for (const ticker of tickers) {
-      showBuffer(`CXPO ${ticker}.${data.exchange}`);
+      try {
+        const window = await showBuffer(`CXPO ${ticker}.${data.exchange}`);
+        if (window) {
+          window.setAttribute('data-cx-fetch-session', sessionId);
+        }
+      } catch (e) {
+        console.error(`Failed to open CXPO window for ${ticker}`, e);
+      }
       await sleep(300);
     }
     complete();

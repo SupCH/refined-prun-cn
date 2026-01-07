@@ -44,6 +44,7 @@ export function createQuickPurchasePackage(
   materials: Record<string, number>,
   exchange: string,
   shipStorage?: PrunApi.Store,
+  includePriceFetch?: boolean,
 ): UserData.ActionPackageData {
   // Round up all material quantities to integers (you can't buy fractional amounts)
   const roundedMaterials: Record<string, number> = {};
@@ -69,7 +70,21 @@ export function createQuickPurchasePackage(
     allowUnfilled: false,
   };
 
-  const actions: UserData.ActionData[] = [buyAction];
+  const actions: UserData.ActionData[] = [];
+
+  // If requested, add price fetch step first
+  if (includePriceFetch) {
+    const fetchAction: UserData.ActionData = {
+      type: 'CX Fetch',
+      name: 'Load Prices',
+      exchange,
+      tickers: Object.keys(roundedMaterials),
+    };
+    actions.push(fetchAction);
+  }
+
+  // Add buy action
+  actions.push(buyAction);
 
   // Only create transfer action if a valid ship storage is provided
   if (shipStorage) {

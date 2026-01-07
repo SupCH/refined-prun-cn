@@ -66,7 +66,7 @@ const figures = computed(() => {
       name: t('fin.currentAssets'),
       value: formatCurrency(liveBalanceSummary.currentAssets),
     },
-    { name: t('fin.totalAssets'), value: formatCurrency(liveBalanceSummary.totalAssets) },
+    { name: t('fin.totalAssets'), value: formatCurrency(liveBalanceSummary.assets) },
     { name: t('fin.equity'), value: formatCurrency(liveBalanceSummary.equity) },
     {
       name: t('fin.quickLiabilities'),

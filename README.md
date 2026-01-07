@@ -1,5 +1,19 @@
 # Refined PrUn 中文汉化版
 
+## 🎯 核心价值
+
+**本扩展专为《星海远航》(Prosperous Universe) 游戏玩家设计**，提供：
+- ✅ **完整中文汉化**：100% 界面和功能描述中文化
+- 📊 **智能数据分析**：物资消耗监控(BURN)、财务报表生成(FINBS)
+- 🤖 **自动化工具**：自定义动作包系统(ACT)，一键执行复杂操作
+- 🎨 **界面优化**：100+ 微功能改进，提升游戏体验
+
+> **适用网站**: https://apex.prosperousuniverse.com  
+> **目标用户**: Prosperous Universe 游戏玩家  
+> **核心优势**: 唯一的中文本地化 + 深度功能增强版本
+
+---
+
 **Refined PrUn** 是一款专为科幻经济模拟游戏 **Prosperous Universe (PrUn)** 设计的浏览器增强插件。本版本为**完全汉化版**，实现了 100% 的功能描述及界面汉化。
 
 > **原项目地址**：[refined-prun/refined-prun](https://github.com/refined-prun/refined-prun)  
@@ -9,8 +23,16 @@
 - **全量汉化**：地毯式翻译了 80+ 个微功能开关及 26 个 XIT 自定义命令。
 - **深度适配**：针对财务报表（资产负债表、损益表）、物资监控（BURN）、自动化脚本（ACT）等核心模块进行了语义化翻译。
 - **一键部署**：默认开启中文语言，安装即用。
+- **多平台支持**：支持 Chrome, Edge 和 Firefox，并提供完整的应用商店上架指引。
 
-## 🆕 新增功能（v1.1.0）
+## 🆕 版本更新（v1.2.0）
+
+### 商店上架准备与合规性
+- **隐私权政策**：新增中英文双语[隐私权政策](file:///d:/Tools/browser-extensions/refined-prun/PRIVACY_POLICY.md)，符合 Chrome/Edge 商店合规要求。
+- **审核指南**：新增 [Edge 商店测试指南](file:///d:/Tools/browser-extensions/refined-prun/EDGE_STORE_TESTING_GUIDE.md)，协助审核人员快速理解项目价值。
+- **发布手册**：整理了 [Chrome](file:///d:/Tools/browser-extensions/refined-prun/CHROME_STORE_PUBLISH.md) 及 [Edge](file:///d:/Tools/browser-extensions/refined-prun/EDGE_STORE_PUBLISH.md) 商店发布完整流程。
+
+### 🆕 新增功能（v1.1.0）
 
 ### 快速购买增强 (Quick Purchase)
 - **价格显示**：直接在列表中显示单价和预估总价。
@@ -47,25 +69,67 @@
 
 ## 📦 安装教程
 
-### 1. Chrome / Edge / 浏览器 (推荐)
-1. 下载本仓库 [Releases](https://github.com/SupCH/refined-prun-cn/releases) 中的 `Refined-PrUn-中文汉化版.zip`。
+### 1. 通用安装方法 (Chrome / Edge / Firefox)
+1. 下载本仓库 [Releases](https://github.com/SupCH/refined-prun-cn/releases) 中对应浏览器的压缩包：
+   - Chrome: `(Chrome)(zh-cn)refined-prun.zip`
+   - Edge: `(Edge)(zh-cn)refined-prun.zip`
+   - Firefox: `(Firefox)(zh-cn)refined-prun.zip`
 2. 解压压缩包到本地文件夹。
-3. 打开浏览器扩展页面 (`chrome://extensions/`)。
-4. 开启右上角的 **“开发者模式”**。
-5. 点击 **“加载解压的扩展程序”**，选择解压后的 `dist` 文件夹。
-
-### 2. Firefox 浏览器
-1. 在地址栏输入 `about:debugging#/runtime/this-firefox`。
-2. 点击右上角的 **“临时载入附加组件...”**。
-3. 选择解压文件夹中的 `manifest.json` 文件。
-   *(注意：临时载入在浏览器重启后会失效)*
+3. **Chrome / Edge**: 
+   - 打开扩展页面 (`chrome://extensions/`)，开启 **“开发者模式”**。
+   - 点击 **“加载解压的扩展程序”**，选择解压后的文件夹。
+4. **Firefox**:
+   - 在地址栏输入 `about:debugging#/runtime/this-firefox`。
+   - 点击 **“临时载入附加组件...”**，选择解压文件夹中的 `manifest.json` 文件。
 
 ## 🛠️ 开发与构建
-如果你想自行修改或编译：
-1. 克隆代码：`git clone https://github.com/SupCH/refined-prun-cn.git`
-2. 安装依赖：`pnpm install`
-3. 执行构建：`pnpm build`
-4. 翻译文件位于：`src/infrastructure/i18n/zh.ts`
+
+本项目已建立自动化多平台构建系统。
+
+1. **环境准备**：
+   - 克隆代码：`git clone https://github.com/SupCH/refined-prun-cn.git`
+   - 安装依赖：`pnpm install`
+
+2. **构建命令**：
+   - **全平台构建并打包**：`pnpm run package:all` (生成所有平台的 .zip 文件)
+   - **Chrome 构建**：`pnpm run build:chrome`
+   - **Firefox 构建**：`pnpm run build:firefox`
+   - **Edge 构建**：`pnpm run build:edge`
+   - **本地开发构建** (带 sourcemap)：`pnpm run build:local`
+
+3. **配置文件**：
+   - 基础清单：`manifest.base.json`
+   - 翻译文件：`src/infrastructure/i18n/zh.ts`
+   - 构建脚本：`scripts/` 目录
+
+---
+
+## 🛠 Submission Instructions for Firefox Reviewers
+
+This extension is built from source code using TypeScript and Vite. Reviewers can reproduce the build as follows:
+
+### Prerequisites:
+- **Node.js**: version `22.x` or higher (tested with `22.15.0`)
+- **Package Manager**: `pnpm` (version `9.x`)
+
+### Build Instructions:
+1. Extract the source code archive.
+2. Open a terminal in the root directory of the extracted source.
+3. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+4. Build the Firefox extension:
+   ```bash
+   pnpm run build:firefox
+   ```
+5. The built extension (including the `manifest.json`) will be located in the `dist/firefox/` directory.
+
+### Build Scripts:
+- The build process is orchestrated by `vite` and `scripts/build-all.ts`.
+- `manifest.base.json` is used as the template for the final `manifest.json`.
+
+---
 
 ## ⚖️ 许可
 本项目基于原作者 [Razenpok](https://github.com/refined-prun/refined-prun) 的开源项目二次开发，遵循 MIT 开源协议。

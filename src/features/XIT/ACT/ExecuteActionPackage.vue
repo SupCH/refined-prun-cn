@@ -60,6 +60,8 @@ const needsConfigure = computed(() => {
   return false;
 });
 
+const hasPriceFetchAction = computed(() => pkg.actions.some(a => a.type === 'CX Fetch'));
+
 const isValidConfig = computed(() => {
   for (const action of pkg.actions) {
     const info = act.getActionInfo(action.type);
@@ -163,6 +165,35 @@ function logMessage(tag: LogTag, message: string) {
 function clearLog() {
   log.value.length = 0;
 }
+
+function closeAllPriceWindows() {
+  const windows = Array.from(document.getElementsByClassName(C.Window.window)) as HTMLDivElement[];
+
+  for (const window of windows) {
+    let shouldClose = false;
+
+    // 1. 检查是否是带有 session 标记的价格窗口 (CXPO)
+    const sessionId = window.getAttribute('data-cx-fetch-session');
+    if (sessionId) {
+      shouldClose = true;
+    } else {
+      // 2. 检查是否是 XIT 窗口（包括 "XIT " 和 "XIT_" 格式，不区分大小写）
+      const cmdElement = window.querySelector(`.${C.TileFrame.cmd}`);
+      const cmdText = (cmdElement?.textContent || '').toUpperCase();
+      if (cmdText.startsWith('XIT ') || cmdText.startsWith('XIT_')) {
+        shouldClose = true;
+      }
+    }
+
+    if (shouldClose) {
+      const buttons = window.querySelectorAll(`.${C.Window.button}`);
+      const closeButton = Array.from(buttons).find(x => x.textContent === 'x');
+      if (closeButton) {
+        (closeButton as HTMLElement).click();
+      }
+    }
+  }
+}
 </script>
 
 <template>
@@ -206,6 +237,13 @@ function clearLog() {
         </PrunButton>
         <PrunButton primary :class="$style.executeButton" @click="onAutoExecuteClick">
           {{ t('act.autoExecute').toUpperCase() }}
+        </PrunButton>
+        <PrunButton
+          v-if="hasPriceFetchAction"
+          :class="$style.executeButton"
+          @click="closeAllPriceWindows"
+          dark>
+          {{ t('quickPurchase.closeAllWindows').toUpperCase() }}
         </PrunButton>
       </template>
       <template v-else>
@@ -258,6 +296,6 @@ function clearLog() {
 
 /* Use the same width for cancel and execute buttons to keep layout stable. */
 .executeButton {
-  width: 68px;
+  width: 80px;
 }
 </style>
