@@ -68,9 +68,18 @@
 - **XIT ACT**：创建并执行自动化动作包（转账、购买、加油等）。
 - **UI 优化**：包括图标美化、合同进度直观显示、搜索增强等 100 余项改进。
 
-## 📦 安装教程
 
-### 1. 通用安装方法 (Chrome / Edge / Firefox)
+## 📦 安装
+
+### 从应用商店安装（推荐）
+
+| 浏览器 | 商店链接 |
+|--------|----------|
+| Chrome | [Chrome Web Store](https://chromewebstore.google.com/detail/gobccillghkhdcmhcdgcbdgmklbaegla) |
+| Edge | [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/zhcnrefinedprun/cgpmjmdhfanffbgagpcemapomhfhppab) |
+| Firefox | [Firefox Add-ons](https://addons.mozilla.org/zh-CN/firefox/addon/refined-prun-cn/) |
+
+### 手动安装 (Chrome / Edge / Firefox)
 1. 下载本仓库 [Releases](https://github.com/SupCH/refined-prun-cn/releases) 中对应浏览器的压缩包：
    - Chrome: `(Chrome)(zh-cn)refined-prun.zip`
    - Edge: `(Edge)(zh-cn)refined-prun.zip`
