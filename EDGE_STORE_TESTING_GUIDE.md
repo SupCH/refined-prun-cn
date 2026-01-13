@@ -174,16 +174,7 @@ For visual reference of expected functionality, please see:
 - Basic UI enhancements (icons, layout) are visible without an active game session
 - Some features require in-game data to display properly
 
-### Q3: Why does the extension request `webRequest` permission?
-
-**A**: The extension uses `webRequest` to:
-- Intercept game API responses for financial data extraction (FINBS)
-- Monitor supply consumption data (BURN)
-- Enhance data loading performance
-
-All network monitoring is **strictly limited** to the game domain.
-
-### Q4: Is this extension safe?
+### Q3: Is this extension safe?
 
 **A**: Yes. The extension:
 - ✅ Does NOT collect any personal user information
@@ -191,8 +182,9 @@ All network monitoring is **strictly limited** to the game domain.
 - ✅ Only accesses the game website (no other domains)
 - ✅ All data processing happens locally in the browser
 - ✅ Open source code available on GitHub
+- ✅ Uses minimal permissions (only `storage` for user settings)
 
-### Q5: How can I verify the extension is installed correctly?
+### Q4: How can I verify the extension is installed correctly?
 
 **A**: 
 1. Visit `edge://extensions/` and confirm the extension is enabled
@@ -219,7 +211,7 @@ For review-related questions, please contact via:
 To confirm proper functionality, please verify:
 
 - [ ] Extension installs without errors
-- [ ] Extension only requests necessary permissions (`storage`, `webRequest`)
+- [ ] Extension only requests necessary permissions (`storage` for user settings)
 - [ ] Extension only activates on `https://apex.prosperousuniverse.com/*`
 - [ ] Chinese UI translations are visible on the game website
 - [ ] At least one XIT command (BURN/FINBS/ACT) executes successfully
