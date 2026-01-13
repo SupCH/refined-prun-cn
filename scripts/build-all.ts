@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const platforms = ['chrome', 'edge', 'firefox'] as const;
-type Platform = (typeof platforms)[number];
+type Platform = (typeof platforms)[number] | 'local' | 'tm';
 
 const distRoot = path.resolve(__dirname, '../dist');
 
