@@ -1,7 +1,0 @@
-import { inject } from './runtime-core.esm-bundler.js';
-function useXitCommand() {
-  return inject(xitCommandKey) ?? '';
-}
-const xitCommandKey = Symbol();
-export { useXitCommand, xitCommandKey };
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXNlLXhpdC1jb21tYW5kLmpzIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvaG9va3MvdXNlLXhpdC1jb21tYW5kLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiB1c2VYaXRDb21tYW5kKCkge1xuICByZXR1cm4gaW5qZWN0KHhpdENvbW1hbmRLZXkpID8/ICcnO1xufVxuXG5leHBvcnQgY29uc3QgeGl0Q29tbWFuZEtleSA9IFN5bWJvbCgpIGFzIEluamVjdGlvbktleTxzdHJpbmc+O1xuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBTyxTQUFBLGdCQUFBO0FBQ0wsU0FBQSxPQUFBLGFBQUEsS0FBQTtBQUNGO0FBRU8sTUFBQSxnQkFBQSxPQUFBOyJ9

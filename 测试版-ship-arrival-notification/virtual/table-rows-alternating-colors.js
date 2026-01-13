@@ -1,8 +1,0 @@
-import { applyCssRule } from './refined-prun-css.js';
-import features from './feature-registry.js';
-import tableAlternatingColors from './table-rows-alternating-colors.module.css.js';
-function init() {
-  applyCssRule('table', tableAlternatingColors.table);
-}
-features.add(import.meta.url, init, 'Colors even rows in lighter color in all tables.');
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGFibGUtcm93cy1hbHRlcm5hdGluZy1jb2xvcnMuanMiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9mZWF0dXJlcy9iYXNpYy90YWJsZS1yb3dzLWFsdGVybmF0aW5nLWNvbG9ycy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgJHN0eWxlIGZyb20gJy4vdGFibGUtcm93cy1hbHRlcm5hdGluZy1jb2xvcnMubW9kdWxlLmNzcyc7XG5cbmZ1bmN0aW9uIGluaXQoKSB7XG4gIGFwcGx5Q3NzUnVsZSgndGFibGUnLCAkc3R5bGUudGFibGUpO1xufVxuXG5mZWF0dXJlcy5hZGQoaW1wb3J0Lm1ldGEudXJsLCBpbml0LCAnQ29sb3JzIGV2ZW4gcm93cyBpbiBsaWdodGVyIGNvbG9yIGluIGFsbCB0YWJsZXMuJyk7XG4iXSwibmFtZXMiOlsiJHN0eWxlIl0sIm1hcHBpbmdzIjoiOzs7QUFFQSxTQUFBLE9BQUE7QUFDRSxlQUFBLFNBQUFBLHVCQUFBLEtBQUE7QUFDRjtBQUVBLFNBQUEsSUFBQSxZQUFBLEtBQUEsTUFBQSxrREFBQTsifQ==

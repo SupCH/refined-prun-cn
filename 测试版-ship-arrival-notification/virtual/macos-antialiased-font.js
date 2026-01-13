@@ -1,8 +1,0 @@
-import { applyCssRule } from './refined-prun-css.js';
-import features from './feature-registry.js';
-import $style from './macos-antialiased-font.module.css.js';
-function init() {
-  applyCssRule('body', $style.body);
-}
-features.add(import.meta.url, init, 'Applies antialiased smoothing to all fonts on macOS.');
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFjb3MtYW50aWFsaWFzZWQtZm9udC5qcyIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2ZlYXR1cmVzL2Jhc2ljL21hY29zLWFudGlhbGlhc2VkLWZvbnQudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0ICRzdHlsZSBmcm9tICcuL21hY29zLWFudGlhbGlhc2VkLWZvbnQubW9kdWxlLmNzcyc7XG5cbmZ1bmN0aW9uIGluaXQoKSB7XG4gIGFwcGx5Q3NzUnVsZSgnYm9keScsICRzdHlsZS5ib2R5KTtcbn1cblxuZmVhdHVyZXMuYWRkKGltcG9ydC5tZXRhLnVybCwgaW5pdCwgJ0FwcGxpZXMgYW50aWFsaWFzZWQgc21vb3RoaW5nIHRvIGFsbCBmb250cyBvbiBtYWNPUy4nKTtcbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFFQSxTQUFBLE9BQUE7QUFDRSxlQUFBLFFBQUEsT0FBQSxJQUFBO0FBQ0Y7QUFFQSxTQUFBLElBQUEsWUFBQSxLQUFBLE1BQUEsc0RBQUE7In0=

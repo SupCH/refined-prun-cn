@@ -1,9 +1,0 @@
-import { applyCssRule } from './refined-prun-css.js';
-import { C } from './prun-css.js';
-import features from './feature-registry.js';
-import css from './css-utils.module.css.js';
-function init() {
-  applyCssRule(`.ContextControls__container___pADKUO4 > .${C.HeadItem.container}`, css.hidden);
-}
-features.add(import.meta.url, init, 'Hides the current context name label (CTX).');
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaGlkZS1jdHgtbmFtZS5qcyIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2ZlYXR1cmVzL2FkdmFuY2VkL2hpZGUtY3R4LW5hbWUudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGNzcyBmcm9tICdAc3JjL3V0aWxzL2Nzcy11dGlscy5tb2R1bGUuY3NzJztcblxuZnVuY3Rpb24gaW5pdCgpIHtcbiAgLy8gVW5mb3J0dW5hdGVseSwgdGhlcmUgYXJlIHR3byBjbGFzc2VzIHRoYXQgc3RhcnQgd2l0aCAnQ29udGV4dENvbnRyb2xzX19jb250YWluZXInLlxuICAvLyBBbmQgJ0NvbnRleHRDb250cm9sc19fY29udGFpbmVyX19fcEFES1VPNCcgaXMgbm90IGF2YWlsYWJsZSBpbiBpbXBvcnRlZCBjbGFzc2VzLlxuICBhcHBseUNzc1J1bGUoYC5Db250ZXh0Q29udHJvbHNfX2NvbnRhaW5lcl9fX3BBREtVTzQgPiAuJHtDLkhlYWRJdGVtLmNvbnRhaW5lcn1gLCBjc3MuaGlkZGVuKTtcbn1cblxuZmVhdHVyZXMuYWRkKGltcG9ydC5tZXRhLnVybCwgaW5pdCwgJ0hpZGVzIHRoZSBjdXJyZW50IGNvbnRleHQgbmFtZSBsYWJlbCAoQ1RYKS4nKTtcbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBRUEsU0FBQSxPQUFBO0FBR0UsZUFBQSw0Q0FBQSxFQUFBLFNBQUEsU0FBQSxJQUFBLElBQUEsTUFBQTtBQUNGO0FBRUEsU0FBQSxJQUFBLFlBQUEsS0FBQSxNQUFBLDZDQUFBOyJ9

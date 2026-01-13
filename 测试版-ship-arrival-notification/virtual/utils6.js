@@ -1,8 +1,0 @@
-import { storagesStore } from './storage.js';
-function getRefuelOrigins() {
-  return (storagesStore.all.value ?? []).filter(
-    x => x.type !== 'FTL_FUEL_STORE' && x.type !== 'STL_FUEL_STORE',
-  );
-}
-export { getRefuelOrigins };
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXRpbHM2LmpzIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvZmVhdHVyZXMvWElUL0FDVC9hY3Rpb25zL3JlZnVlbC91dGlscy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBzdG9yYWdlc1N0b3JlIH0gZnJvbSAnQHNyYy9pbmZyYXN0cnVjdHVyZS9wcnVuLWFwaS9kYXRhL3N0b3JhZ2UnO1xuXG5leHBvcnQgZnVuY3Rpb24gZ2V0UmVmdWVsT3JpZ2lucygpIHtcbiAgcmV0dXJuIChzdG9yYWdlc1N0b3JlLmFsbC52YWx1ZSA/PyBbXSkuZmlsdGVyKFxuICAgIHggPT4geC50eXBlICE9PSAnRlRMX0ZVRUxfU1RPUkUnICYmIHgudHlwZSAhPT0gJ1NUTF9GVUVMX1NUT1JFJyxcbiAgKTtcbn1cbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBRU8sU0FBUyxtQkFBbUI7QUFDakMsVUFBUSxjQUFjLElBQUksU0FBUyxDQUFBLEdBQUk7QUFBQSxJQUNyQyxDQUFBLE1BQUssRUFBRSxTQUFTLG9CQUFvQixFQUFFLFNBQVM7QUFBQSxFQUFBO0FBRW5EOyJ9

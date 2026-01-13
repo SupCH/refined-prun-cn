@@ -1,9 +1,0 @@
-import xit from './xit-registry.js';
-import _sfc_main from './CXTS.vue.js';
-xit.add({
-  command: ['CXTS'],
-  name: 'COMMODITY EXCHANGE TRADES',
-  description: 'List of all your commodity exchange trades.',
-  component: () => _sfc_main,
-});
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ1hUUy5qcyIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2ZlYXR1cmVzL1hJVC9DWFRTL0NYVFMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IENYVFMgZnJvbSAnQHNyYy9mZWF0dXJlcy9YSVQvQ1hUUy9DWFRTLnZ1ZSc7XG5cbnhpdC5hZGQoe1xuICBjb21tYW5kOiBbJ0NYVFMnXSxcbiAgbmFtZTogJ0NPTU1PRElUWSBFWENIQU5HRSBUUkFERVMnLFxuICBkZXNjcmlwdGlvbjogJ0xpc3Qgb2YgYWxsIHlvdXIgY29tbW9kaXR5IGV4Y2hhbmdlIHRyYWRlcy4nLFxuICBjb21wb25lbnQ6ICgpID0+IENYVFMsXG59KTtcbiJdLCJuYW1lcyI6WyJDWFRTIl0sIm1hcHBpbmdzIjoiOztBQUVBLElBQUEsSUFBQTtBQUFBLEVBQVEsU0FBQSxDQUFBLE1BQUE7QUFBQSxFQUNVLE1BQUE7QUFBQSxFQUNWLGFBQUE7QUFBQSxFQUNPLFdBQUEsTUFBQUE7QUFFZixDQUFBOyJ9

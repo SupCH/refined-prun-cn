@@ -1,9 +1,0 @@
-function subscribe(generator, callback) {
-  (async () => {
-    for await (const item of generator) {
-      callback(item);
-    }
-  })().catch(e => console.error(e));
-}
-export { subscribe };
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3Vic2NyaWJlLWFzeW5jLWdlbmVyYXRvci5qcyIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL3V0aWxzL3N1YnNjcmliZS1hc3luYy1nZW5lcmF0b3IudHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGZ1bmN0aW9uIHN1YnNjcmliZTxUPihnZW5lcmF0b3I6IEFzeW5jSXRlcmFibGU8VD4sIGNhbGxiYWNrOiAoaXRlbTogVCkgPT4gdm9pZCkge1xuICAoYXN5bmMgKCkgPT4ge1xuICAgIGZvciBhd2FpdCAoY29uc3QgaXRlbSBvZiBnZW5lcmF0b3IpIHtcbiAgICAgIGNhbGxiYWNrKGl0ZW0pO1xuICAgIH1cbiAgfSkoKS5jYXRjaChlID0+IGNvbnNvbGUuZXJyb3IoZSkpO1xufVxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFPLFNBQVMsVUFBYSxXQUE2QixVQUE2QjtBQUNyRixHQUFDLFlBQVk7QUFDWCxxQkFBaUIsUUFBUSxXQUFXO0FBQ2xDLGVBQVMsSUFBSTtBQUFBLElBQ2Y7QUFBQSxFQUNGLEtBQUssTUFBTSxPQUFLLFFBQVEsTUFBTSxDQUFDLENBQUM7QUFDbEM7In0=

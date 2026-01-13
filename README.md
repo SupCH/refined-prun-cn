@@ -31,14 +31,14 @@
 - **一键部署**：默认开启中文语言，安装即用。
 - **多平台支持**：支持 Chrome, Edge 和 Firefox，并提供完整的应用商店上架指引。
 
-## 🆕 版本更新（v1.2.0）
+## 🆕 版本更新（v1.3.0）
 
 ### 商店上架准备与合规性
 - **隐私权政策**：新增中英文双语[隐私权政策](file:///d:/Tools/browser-extensions/refined-prun/PRIVACY_POLICY.md)，符合 Chrome/Edge 商店合规要求。
 - **审核指南**：新增 [Edge 商店测试指南](file:///d:/Tools/browser-extensions/refined-prun/EDGE_STORE_TESTING_GUIDE.md)，协助审核人员快速理解项目价值。
 - **发布手册**：整理了 [Chrome](file:///d:/Tools/browser-extensions/refined-prun/CHROME_STORE_PUBLISH.md) 及 [Edge](file:///d:/Tools/browser-extensions/refined-prun/EDGE_STORE_PUBLISH.md) 商店发布完整流程。
 
-### 🆕 新增功能（v1.1.0）
+### 🆕 新增功能（v1.2.0 / v1.1.0）
 
 ### 快速购买增强 (Quick Purchase)
 - **价格显示**：直接在列表中显示单价和预估总价。
@@ -46,11 +46,6 @@
 - **指令精准**：采用 `CXPO <物品>.<交易所>` 格式，精准打开对应交易所订单。
 - **体验优化**：本地仓库优先展示，按钮样式统一。
 
-### ACT 全自动执行
-- **一键自动执行**：新增"全自动执行"按钮，自动完成所有动作步骤
-- **智能控制**：保留手动"执行下一步"按钮，随时切换手动/自动模式
-- **停止自动**：执行中可随时点击"停止自动"切换回手动控制
-- **安全机制**："取消"按钮始终可用，随时终止执行
 
 ### BURN 快速购买基础
 - **站点选择**：可选择特定基地生成购买计划（仅采购该基地需要的材料）

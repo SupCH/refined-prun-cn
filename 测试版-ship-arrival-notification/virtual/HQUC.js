@@ -1,9 +1,0 @@
-import xit from './xit-registry.js';
-import HQUC from './HQUC.vue.js';
-xit.add({
-  command: ['HQUC'],
-  name: 'HQ UPGRADE CALCULATOR',
-  description: 'HQ upgrade calculator.',
-  component: () => HQUC,
-});
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSFFVQy5qcyIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2ZlYXR1cmVzL1hJVC9IUVVDLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBIUVVDIGZyb20gJ0BzcmMvZmVhdHVyZXMvWElUL0hRVUMudnVlJztcblxueGl0LmFkZCh7XG4gIGNvbW1hbmQ6IFsnSFFVQyddLFxuICBuYW1lOiAnSFEgVVBHUkFERSBDQUxDVUxBVE9SJyxcbiAgZGVzY3JpcHRpb246ICdIUSB1cGdyYWRlIGNhbGN1bGF0b3IuJyxcbiAgY29tcG9uZW50OiAoKSA9PiBIUVVDLFxufSk7XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFFQSxJQUFBLElBQUE7QUFBQSxFQUFRLFNBQUEsQ0FBQSxNQUFBO0FBQUEsRUFDVSxNQUFBO0FBQUEsRUFDVixhQUFBO0FBQUEsRUFDTyxXQUFBLE1BQUE7QUFFZixDQUFBOyJ9
