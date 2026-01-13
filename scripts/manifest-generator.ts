@@ -52,9 +52,15 @@ interface ManifestBase {
 
 async function generateManifest(platform: Platform): Promise<string> {
   const baseManifestPath = path.resolve(__dirname, '../manifest.base.json');
-  const baseManifest: ManifestBase = JSON.parse(await fs.readFile(baseManifestPath, 'utf-8'));
+  const packageJsonPath = path.resolve(__dirname, '../package.json');
 
-  const manifest: Partial<ManifestBase> = { ...baseManifest };
+  const baseManifest: ManifestBase = JSON.parse(await fs.readFile(baseManifestPath, 'utf-8'));
+  const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'));
+
+  const manifest: Partial<ManifestBase> = {
+    ...baseManifest,
+    version: packageJson.version,
+  };
 
   switch (platform) {
     case 'chrome':
