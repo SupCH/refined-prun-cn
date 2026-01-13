@@ -235,9 +235,7 @@ function closeAllPriceWindows() {
         <PrunButton primary @click="onExecuteClick">
           {{ t('act.execute').toUpperCase() }}
         </PrunButton>
-        <PrunButton primary :class="$style.executeButton" @click="onAutoExecuteClick">
-          {{ t('act.autoExecute').toUpperCase() }}
-        </PrunButton>
+
         <PrunButton
           v-if="hasPriceFetchAction"
           :class="$style.executeButton"
