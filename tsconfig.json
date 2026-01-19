@@ -1,5 +1,7 @@
 {
-  "extends": ["@vue/tsconfig/tsconfig.dom.json"],
+  "extends": [
+    "@vue/tsconfig/tsconfig.dom.json"
+  ],
   "compilerOptions": {
     "module": "ESNext",
     "target": "ES6",
@@ -21,12 +23,30 @@
     "noImplicitReturns": true,
     "baseUrl": "./",
     "verbatimModuleSyntax": false,
-    "types": ["vite/client", "node", "chrome"],
+    "types": [
+      "vite/client",
+      "node",
+      "chrome"
+    ],
     "paths": {
-      "@src/*": ["src/*"],
-      "~/*": ["src/assets/*"]
+      "@src/*": [
+        "src/*"
+      ],
+      "~/*": [
+        "src/assets/*"
+      ]
     },
-    "lib": ["DOM", "WebWorker", "ESNext"]
+    "lib": [
+      "DOM",
+      "WebWorker",
+      "ESNext"
+    ]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue", "vite.config.mts"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "vite.config.mts",
+    "scripts/**/*.ts"
+  ]
 }
